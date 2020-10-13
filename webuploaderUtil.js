@@ -5,17 +5,16 @@ jQuery(function () {
         $btn = $('#ctlBtn'),
         $btnAddHTYForm = $('#addHTYForm'),
         $btnAddDataResultAchieveReportForm = $('#addDataResultAchieveReportForm'),
-        // pathText = $('#pathText').val(),
         state = 'pending',
         contextPath = 'http://10.2.29.115:18090/HTTPServer',
         //contextPath = 'http://192.168.109.214:18050/HTTPServer',
         //分片大小
         chunkSize = 2 * 1024 * 1024,
         pathText = '',
+        token = '',
         //本次上传任务ID
         taskId = '',
         filelist = new Array(),
-
         //上传信息
         $token = $('#token'),
         $user = $('#user'),
@@ -45,7 +44,7 @@ jQuery(function () {
             // console.log("beforeSendFile");
             // Deferred对象在钩子回掉函数中经常要用到，用来处理需要等待的异步操作。
             var task = new $.Deferred();
-            $.post(contextPath + "/checkFile", {path: pathText, name: file.name},
+            $.post(contextPath + "/checkFile", {path: pathText, name: file.name,token:$token.val()},
                 function (data) {
                     // console.log(data.data);
                     if (data.code == 200) {
@@ -108,7 +107,7 @@ jQuery(function () {
             md5: '',
             chunkSize: chunkSize,
             path: pathText,
-            token: $token.val(),
+            token:token,
             id: taskId
         },
         //dnd: '#dndArea',
@@ -208,6 +207,7 @@ jQuery(function () {
         var file = obj.file;
         data.md5 = file.md5 || '';
         data.path = pathText;
+        data.token = token;
     };
     // 上传中
     // uploader.on('uploadProgress', function (file, percentage) {
@@ -226,7 +226,7 @@ jQuery(function () {
     });
     uploader.on('uploadStart', function (file) {
         $.post(contextPath + "/file/firstUpload/", {
-            token: $token.val(),
+            token: token,
             path: pathText,
             fileName: file.name
         }, function (data) {
@@ -284,7 +284,7 @@ jQuery(function () {
             i=0;
         }
         $.post(contextPath + "/file/endUpload/", {
-            token: $token.val(),
+            token: token,
             path: pathText,
             fileName: file.name,
             updateStatus: 12,//已上传
@@ -320,7 +320,7 @@ jQuery(function () {
     uploader.on('uploadError', function (file) {
         $('#' + file.id).find('.file-status').text('上传出错');
         $.post(contextPath + "/file/endUpload/", {
-            token: $token.val(),
+            token: token,
             path: pathText,
             fileName: file.name,
             updateStatus: 13//上传错误
@@ -411,6 +411,7 @@ jQuery(function () {
                 if (data.code == 200 && data.data.result.code == 200) {
                     pathText = data.data.tempDir;
                     taskId = data.data.taskId;
+                    token = $token.val(),
                     uploader.upload();
                 } else if (data.data != null && data.data.result != null) {
                     // alert("文件校验失败 " + data.data.result.data + ":" + data.data.result.message);

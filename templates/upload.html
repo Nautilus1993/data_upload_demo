@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件上传</title>
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/upload/css/webuploader.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+
+<div><br></div>
+<form action="" method="get" >
+    <p>舱段名称: <input type="text" id="cabin" /></p>
+    <p>数据类型:
+        <select id="type">
+            <option value ="pa">有效载荷运控管理系统原始数据</option>
+            <option value ="sa">科学与应用数据中心数据</option>
+            <option value="se">空间环境预报数据</option>
+        </select>
+    </p>
+
+    <p>采集时间: <input type="datetime-local" id="getTime" /></p>
+
+    <p>数据描述: <input type="text" id="desc" /></p>
+
+    <p>标签:
+    <p><input type="checkbox" value=1 /> 标签1描述</p>
+    <p><input type="checkbox" value=2  /> 标签2描述</p>
+    <p><input type="checkbox" value=3  /> 标签2描述</p>
+    </p>
+    <!-- <input type="submit" value="Submit" />-->
+</form>
+<div><br></div>
+<div id="uploader" class="wu-example">
+    <!--用来存放文件信息-->
+    <div id="thelist" class="uploader-list">
+        <table class="table" border="1" cellpadding="0" cellspacing="0" width="100%">
+            <tr class="filelist-head">
+                <th width="5%" class="file-num">序号</th>
+                <th class="file-name">名称</th>
+                <th class="file-size">大小</th>
+                <th width="20%" class="file-pro">进度</th>
+                <th class="file-status">状态</th>
+                <th width="20%" class="file-manage">操作</th>
+            </tr>
+        </table>
+    </div>
+
+    <div class="btns">
+        <div id="picker">选择大文件</div>
+        <!--<span>
+            上传的文件目录：<input type="text" value="hahaha" id="pathText" readonly="readonly"/>
+        </span>-->
+        <br>
+        <button id="ctlBtn" class="btn btn-default">开始上传</button>
+    </div>
+</div>
+
+<script type="text/javascript" src="${request.contextPath}/upload/js/jquery.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/upload/js/webuploader.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/upload/js/webuploaderUtil.js"></script>
+<script type="text/javascript" src="${request.contextPath}/upload/js/base64.js"></script>
+
+</body>
+</html>

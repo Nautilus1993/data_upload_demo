@@ -1,0 +1,72 @@
+server:
+  # 服务器的HTTP端口，默认为8080
+  port: 18090
+  servlet:
+    # 应用的访问路径
+    context-path: /HTTPServer
+
+spring:
+  application:
+    name: httpservice-client-local
+  redis:
+    host: 10.2.29.102
+#    host: 192.168.109.214
+    port: 6379
+    password:
+    lettuce:
+      pool:
+        max-active: 20
+        max-idle: 20
+        min-idle: 10
+  freemarker:
+    request-context-attribute: request
+    suffix: .html
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 100MB
+    connection-timeout: 18000000
+
+
+#eureka
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://10.2.29.102:18070/eureka/    # 指定注册中心的地址
+#      defaultZone: http://192.168.109.214:18070/eureka/    # 指定注册中心的地址
+  instance:
+    preferIpAddress: true
+    ip-address: 10.2.29.102
+#    ip-address: 192.168.109.214
+
+#Swagger2开关
+swagger2:
+  enable: true
+
+#日志
+logging:
+  level:
+    com.bjsasc.datatransferhttpServer: debug
+  file:
+    config: classpath:logback.xml
+#http 上传
+upload:
+  chunkSize: 2 #单位为M
+  thread:
+    maxSize: 25
+  queue:
+    maxSize: 100
+  root:
+    dir: /home/hanbing/HTTPData
+  window: #window系统指定盘符
+    root: D:/
+  #basicManagerURL: http://10.2.29.38:18081/filetransfer/    #manager后台调用
+  basicManagerURL: http://10.2.29.102:18081/filetransfer/    #manager后台调用
+
+#中心名称
+center:
+  hty: center_1 #hty
+  poac: center_1  #poac
+#数据小类
+subType:
+  dataResultAchieveReport: sub_6 #DataResultAchieveReport

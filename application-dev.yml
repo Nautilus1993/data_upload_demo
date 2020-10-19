@@ -1,0 +1,48 @@
+server:
+  # 服务器的HTTP端口，默认为8080
+  port: 8888
+  servlet:
+    # 应用的访问路径
+    context-path: /HTTPServer
+
+spring:
+  #http 上传 redis缓存文件MD5信息
+  redis:
+    host: localhost
+    port: 6379
+    password:
+    lettuce:
+      pool:
+        max-active: 20
+        max-idle: 20
+        min-idle: 10
+  freemarker:
+    request-context-attribute: request
+    suffix: .html
+  servlet:
+    multipart:
+      max-request-size: 100MB
+      max-file-size: 100MB
+    connection-timeout: 18000000
+
+#Swagger2开关
+swagger2:
+  enable: true
+
+#日志
+logging:
+  level:
+    com.bjsasc.datatransferhttpServer: debug
+  config: classpath:logback.xml
+#http 上传
+upload:
+  chunkSize: 2 #单位为M
+  thread:
+    maxSize: 25
+  queue:
+    maxSize: 100
+  root:
+    dir: /file/uploads
+  window: #window系统指定盘符
+    root: D:/
+  basicManagerURL: http://10.2.29.32:9999/filetransfer/    #manager后台调用

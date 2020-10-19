@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件上传</title>
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/upload/css/webuploader.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+
+<div><br></div>
+<div>
+    <form action="" method="get" >
+        <p>舱段名称: <input type="text" id="cabin" /></p>
+
+        <p>数据类型:
+            <select id="type">
+                <option value ="pa">有效载荷运控管理系统原始数据</option>
+                <option value ="sa">科学与应用数据中心数据</option>
+                <option value="se">空间环境预报数据</option>
+            </select>
+        </p>
+
+        <p>采集时间: <input type="datetime-local" id="getTime" /></p>
+
+        <p>数据描述: <input type="text" id="desc" /></p>
+
+        <p>标签:
+        <p><input type="checkbox" name="label" value=1 /> 标签1描述</p>
+        <p><input type="checkbox" name="label" value=2  /> 标签2描述</p>
+        <p><input type="checkbox" name="label" value=3  /> 标签2描述</p>
+        </p>
+        <!-- <input type="submit" value="Submit" />-->
+    </form>
+</div>
+<div><br></div>
+<div id="uploader" class="wu-example">
+    <!--用来存放文件信息-->
+    <div id="thelist" class="uploader-list">
+        <div class="upload-item">
+            <!--<span>文件名</span>
+            <span data-file_id="" class="btn-delete">删除</span>
+            <span data-file_id="" class="btn-retry">重试</span>
+            <span data-file_path="" class="btn-download">下载</span>
+            <span data-file_id="" class="btn-status">下载状态</span>
+            <div class="percentage"></div> -->
+        </div>
+    </div>
+    <!--<div id="dndArea" class="placeholder">
+        <div id="filePicker"></div>
+        <p>或将文件拖到这里，单个文件大小不超过2M，单次上传文件总大小不超过20M</p>
+    </div> -->
+    <div class="btns">
+        <div id="picker">选择大文件</div>
+        <!--<span>
+            上传的文件目录：<input type="text" value="hahaha" id="pathText" readonly="readonly"/>
+        </span>-->
+        <br>
+        <button id="ctlBtn" class="btn btn-default">开始上传</button>
+    </div>
+</div>
+
+<script type="text/javascript" src="${request.contextPath}/upload/js/jquery.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/upload/js/webuploader.min.js"></script>
+<script type="text/javascript" src="${request.contextPath}/upload/js/webuploaderUtil.js"></script>
+
+</body>
+</html>

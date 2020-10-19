@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件上传</title>
+    <link rel="stylesheet" type="text/css" href="../static/upload/css/webuploader.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+
+<div><br></div>
+<form action="" method="get" >
+    <p>用户: <input type="text" id="user" value="admin" /></p>
+    <p>令牌token: <input type="text" id="token" /></p>
+    <p>用户组: <input type="text" id="group" value="用户组" /></p>
+    <p>舱段名称: <input type="text" id="cabin" value="cabin_001"/></p>
+    <p>中心:
+        <select id="center">
+            <option value ="center_001">有效载荷中心</option>
+            <option value="center_001">航天员中心</option>
+        </select>
+    </p>
+    <p>数据大类: <input type="text" id="MainType" value="main_001"/></p>
+    <p>数据小类:
+        <select id="type">
+            <option value ="sub_5">有效载荷运控管理系统原始数据</option>
+            <option value ="sub_5">科学与应用数据中心数据</option>
+            <option value="sub_5">空间环境预报数据</option>
+            <option value="sub_5">航天员支持中心文件清单</option>
+            <option value="sub_5">数据成果</option>
+        </select>
+    </p>
+
+    <p>采集时间: <input type="datetime-local" id="getTime" /></p>
+
+    <p>数据描述: <input type="text" id="desc" value="数据描述"/></p>
+
+    <p>标签:
+    <p><input type="checkbox" class="check-menu-item" value=8171b09d3ca1465f86025cf4cfae4b4d checked/> 标签1描述</p>
+    <p><input type="checkbox" class="check-menu-item" value=2e48a1b6cc9f4e75905bfc22a83444b6  /> 标签2描述</p>
+    <p><input type="checkbox" class="check-menu-item" value=18aacc89fe774544a0b2690ff40d0499  /> 标签2描述</p>
+    </p>
+
+    <!-- 航天员支持中心文件清单表
+    <div id = "formHTY">
+    </div>
+    <input type="button" id="addHTYForm" value="添加航天员支持中心文件清单" >  -->
+
+    <!-- 数据成果-->
+    <div id = "formDataAchieve">
+    </div>
+    <input type="button" id="addDataResultAchieveReportForm" value="添加数据成果" >
+
+</form>
+<div><br></div>
+<div id="uploader" class="wu-example">
+    <!--用来存放文件信息-->
+    <div id="thelist" class="uploader-list">
+        <table class="table" border="1" cellpadding="0" cellspacing="0" width="100%">
+            <tr class="filelist-head">
+                <th width="5%" class="file-num">序号</th>
+                <th class="file-name">名称</th>
+                <th class="file-size">大小</th>
+                <th width="20%" class="file-pro">进度</th>
+                <th class="file-status">状态</th>
+                <th width="20%" class="file-manage">操作</th>
+            </tr>
+        </table>
+    </div>
+
+    <div class="btns">
+        <div id="picker">选择大文件</div>
+        <!--<span>
+            上传的文件目录：<input type="text" value="hahaha" id="pathText" readonly="readonly"/>
+        </span>-->
+        <br>
+        <button id="ctlBtn" class="btn btn-default">开始上传</button>
+    </div>
+</div>
+
+<script type="text/javascript" src="../static/upload/js/jquery.min.js"></script>
+<script type="text/javascript" src="../static/upload/js/webuploader.min.js"></script>
+<script type="text/javascript" src="../static/upload/js/webuploaderUtil.js"></script>
+<script type="text/javascript" src="../static/upload/js/base64.js"></script>
+
+</body>
+</html>

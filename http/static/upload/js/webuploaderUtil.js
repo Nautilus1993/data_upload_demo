@@ -40,6 +40,7 @@ jQuery(function () {
         'before-send': 'beforeSend',
         'add-file': 'addFiles'
     }, {
+        // step 2
         beforeSendFile: function (file) {
             // console.log("beforeSendFile");
             // Deferred对象在钩子回掉函数中经常要用到，用来处理需要等待的异步操作。
@@ -100,6 +101,7 @@ jQuery(function () {
         }
     });
 
+    // step 4: upload
     // 实例化
     var uploader = WebUploader.create({
         pick: {
@@ -227,6 +229,7 @@ jQuery(function () {
         //     alert(data.message+data.data);
         // });
     });
+    // step 3
     uploader.on('uploadStart', function (file) {
         $.post(contextPath + "/file/firstUpload/", {
             token: token,
@@ -286,6 +289,7 @@ jQuery(function () {
         if(i==formInfo.length){
             i=0;
         }
+        // step 5
         $.post(contextPath + "/file/endUpload/", {
             token: token,
             path: pathText,
@@ -395,6 +399,7 @@ jQuery(function () {
 
             console.log(formInfo)
 
+            // step1
             $.post(contextPath + "/task/upload/start", {
                 cabinName: $cabin.val(),
                 dataCenter: $center.val(),

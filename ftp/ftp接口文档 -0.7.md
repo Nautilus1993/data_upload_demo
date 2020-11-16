@@ -53,20 +53,20 @@ public List<FTPFile> searchFiles(String mainType,
 
 ##### 方法功能：分页搜索文件
 
-| 参数         | 解释         |
-| ------------ | ------------ |
-| mainType     | 数据类型大类 |
-| subType      | 数据类型小类 |
-| query_params | 查询参数     |
-| page_size    | 每页数量     |
-| page_number  | 当前页       |
+| 参数         | 解释                           |
+| ------------ | ------------------------------ |
+| mainType     | 数据类型大类                   |
+| subType      | 数据类型小类                   |
+| query_params | 查询参数                       |
+| page_size    | 每页数量                       |
+| page_number  | 当前页，从1开始（为0查询所有） |
 
 ##### 返回值：文件信息集合List<FTPFile>
 
 ##### 使用示例
 
 ```java
-int pageSize = 10; //分页大小
+int pageSize = 10; //分页大小 
 int pageNum = 1; //页码
 //查询条件
 QueryParam queryParam = new QueryParam();

@@ -155,7 +155,7 @@ public FileOperationResult startDownload(String mainType,
 ```java
 String downloadPath = "D:\\hanbing"; //下载到本地路径;
 List<String> fileNames = new ArrayList<>();
-fileNames.add(file);//文件名称列表
+fileNames.add("CT_TL1A2_SZ12_20201028052556_20201028052556_20201028052556_M_00001.raw");//文件名称列表 
 String mainType = "main_001";  // 数据大类：归档数据
 String subType = "sub_001";    // 数据小类：原始数据文件
 FileOperationResult result = myFtp.startDownload(mainType, subType, downloadPath, fileNames);

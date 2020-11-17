@@ -68,6 +68,8 @@ public List<FTPFile> searchFiles(String mainType,
 ```java
 int pageSize = 10; //分页大小 
 int pageNum = 1; //页码
+String mainType = "main_001";  // 数据大类：归档数据
+String subType = "sub_001";    // 数据小类：原始数据文件
 //查询条件
 QueryParam queryParam = new QueryParam();
 String upload_time = "2020-11-12";//上传时间
@@ -84,6 +86,8 @@ RuntimeException：查询参数不合法
 ```
 
 #### 3.startDownload()
+
+##### 3.1 根据search方法返回结果下载
 
 ```java
 public FileOperationResult startDownload(String localPath,List<FTPFile> filesToDownload)throws Exception
@@ -122,10 +126,42 @@ public FileOperationResult startDownload(String localPath,List<FTPFile> filesToD
 
 ```java
 String downloadPath = "D:\\hanbing"; //下载到本地路径
-FileOperationResultresult = myFtp.startDownload(downloadPath,filesToDownload);//filesToDownload 文件查询结果
+FileOperationResult result = myFtp.startDownload(downloadPath,
+                           filesToDownload);//filesToDownload 文件查询结果
 ```
 
+##### 3.2 直接下载方法
 
+```Java
+public FileOperationResult startDownload(String mainType, 
+                                         String subType,
+                                         String localDir, 
+                                         List<String>fileNames) throws Exception 
+```
+
+##### 方法功能：根据文件名称直接下载文件
+
+| 参数            | 解释                 |
+| --------------- | -------------------- |
+| mainType        | 数据类型大类         |
+| subType         | 数据类型小类         |
+| localPath       | 下载到的本地路径     |
+| filesToDownload | 要下载的文件名称列表 |
+
+##### 返回值：FileOperationResult 文件操作结果
+
+##### 使用示例
+
+```java
+String downloadPath = "D:\\hanbing"; //下载到本地路径;
+List<String> fileNames = new ArrayList<>();
+fileNames.add(file);//文件名称列表
+String mainType = "main_001";  // 数据大类：归档数据
+String subType = "sub_001";    // 数据小类：原始数据文件
+FileOperationResult result = myFtp.startDownload(mainType, subType, downloadPath, fileNames);
+```
+
+##### 
 
 #### 4. getTags()
 

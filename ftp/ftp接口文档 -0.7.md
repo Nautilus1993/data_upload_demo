@@ -1,34 +1,47 @@
-## 运行使用说明：
+## 简介
 
-1. 从 ftp 目录下载jar包（FTPClientSDK.jdk）https://github.com/Nautilus1993/data_upload_demo/
+​       此文档为使用云平台文件数据归档API上传方式的用户撰写，传输协议使用FTP。请按照**运行使用说明**部署项目并运行，**API使用说明**包含所有方法接口和参数说明
 
-2. 下载并打开测试示例文档 testRawData.java，导入FTPClientSDK.jdk
+## 运行使用说明
 
-3. 根据实际情况，修改localPath（上传文件路径），file（上传文件名称），upload_time（查询参数等），downloadPath（下载文件路径）
+1. 从 ftp 目录下载jar包（FTPClientSDK.jar）和测试文档testRawData.java，github地址：<https://github.com/Nautilus1993/data_upload_demo/tree/main/ftp>
 
-   ------
+2. 到挂载9000机器上，打开idea并且新建项目，导入测试文档testRawData.java，导入jar包FTPClientSDK.jar
+
+3. 根据实际情况，修改 testRawData.java文件里的变量值，如：
+
+   | 变量名       | 变量说明     |
+   | ------------ | ------------ |
+   | localPath    | 上传文件路径 |
+   | file         | 上传文件名称 |
+   | upload_time  | 查询参数等   |
+   | downloadPath | 下载文件路径 |
 
    
 
-### 类：FTPTransferClient
+## API 使用说明
 
-#### 方法：
+### FTPTransferClient类
 
-#### 1.FTPTransferClient()
+#### 类说明：上传引擎类
+
+#### 方法说明：
+
+#### 1.FTPTransferClient()方法
 
 
 ```java
 public FTPTransferClient(String userName,String password)
 ```
 
-##### 方法功能：构造函数
+##### 方法说明：初始化FTPTransferClient用例
 
 | 参数     | 解释         |
 | -------- | ------------ |
 | userName | portal用户名 |
 | password | 密码         |
 
-##### 返回值：无
+##### 返回值：FTPTransferClient 
 
 ##### 使用示例
 
@@ -36,12 +49,12 @@ public FTPTransferClient(String userName,String password)
 String USERNAME = "test_user_1";//用户名
 String PASSWORD = "QWER1234";//密码
 // 初始化FTPTransferClient 实例
-FTPTransferClient myFtp = new FTPTransferClient(USERNAME, PASSWORD)
+FTPTransferClient myFtp = new FTPTransferClient(USERNAME, PASSWORD);
 ```
 
 
 
-#### 2.searchFiles()
+#### 2.searchFiles()方法
 
 ```java
 public List<FTPFile> searchFiles(String mainType,
@@ -51,7 +64,7 @@ public List<FTPFile> searchFiles(String mainType,
                                  int page_number)throws Exception
 ```
 
-##### 方法功能：分页搜索文件
+##### 方法说明：分页搜索文件
 
 | 参数         | 解释                           |
 | ------------ | ------------------------------ |
@@ -85,15 +98,15 @@ NullPointerException：查询参数不存在
 RuntimeException：查询参数不合法
 ```
 
-#### 3.startDownload()
+#### 3.startDownload()方法
 
-##### 3.1 根据search方法返回结果下载
+##### 3.1 查询后下载
 
 ```java
 public FileOperationResult startDownload(String localPath,List<FTPFile> filesToDownload)throws Exception
 ```
 
-##### 方法功能：文件下载
+##### 方法说明：文件下载，下载由search方法返回搜索结果的文件
 
 | 参数            | 解释             |
 | --------------- | ---------------- |
@@ -139,7 +152,7 @@ public FileOperationResult startDownload(String mainType,
                                          List<String>fileNames) throws Exception 
 ```
 
-##### 方法功能：根据文件名称直接下载文件
+##### 方法说明：根据文件名称直接下载文件
 
 | 参数            | 解释                 |
 | --------------- | -------------------- |
@@ -161,15 +174,15 @@ String subType = "sub_001";    // 数据小类：原始数据文件
 FileOperationResult result = myFtp.startDownload(mainType, subType, downloadPath, fileNames);
 ```
 
-##### 
 
-#### 4. getTags()
+
+#### 4. getTags()方法
 
 ```java
 public List getTags()
 ```
 
-##### 方法功能：获取所有标签
+##### 方法说明：获取所有标签
 
 ##### 返回值：所有标签结果List<Tag> 
 
@@ -189,9 +202,9 @@ List<Tag> tagList = myFtp.getTags();
 
 
 
-#### 5. startUpload()
+#### 5. startUpload()方法
 
-##### 5.1 从文件名提取元信息方法上传
+##### 5.1 文件自动归档上传
 
 ```java
 public FileOperationResult startUpload(String cabin，
@@ -201,7 +214,7 @@ public FileOperationResult startUpload(String cabin，
                                 List<FTPFile> filesToUpload)throws Exception
 ```
 
-##### 方法功能：用户开始上传
+##### 方法说明：文件上传，从文件名提取元信息方法上传
 
 | 参数          | 解释               |
 | ------------- | ------------------ |
@@ -253,7 +266,7 @@ tagLabels.add("40e8e2517c96482c90ea0aba1ce637b0");
 FileOperationResult result = myFtp.startUpload(cabin,mainType,subType, tagLabels,ftpFiles);
 ```
 
-##### 5.2 元信息方法上传
+##### 5.2 手动归档上传
 
 ```java
 public FileOperationResult startUploadWithInfo(String cabin, 
@@ -263,7 +276,7 @@ public FileOperationResult startUploadWithInfo(String cabin,
                                Map<FTPFile, BaseFile>uploadFileMap)  throws Exception
 ```
 
-##### 方法功能：用户开始上传
+##### 方法功能：文件上传，需要用户手动录入归档元信息
 
 | 参数          | 解释                             |
 | ------------- | -------------------------------- |
@@ -302,15 +315,15 @@ tagLabels.add("40e8e2517c96482c90ea0aba1ce637b0");
 FileOperationResult result = myFtp.startUpload(cabin,mainType,subType, tagLabels,ftpFiles);
 ```
 
-##### 
 
-#### 6. deleteFile()
+
+#### 6. deleteFile()方法
 
 ```java
 public FileOperationResult deleteFile(List<FTPFile> filesToDelete)throws Exception
 ```
 
-##### 方法功能：删除文件
+##### 方法说明：删除文件
 
 | 参数          | 解释             |
 | ------------- | ---------------- |
@@ -344,7 +357,9 @@ public FileOperationResult deleteFile(List<FTPFile> filesToDelete)throws Excepti
 FileOperationResult result = myFtp.deleteFile(filesToDelete)；//filesToDelete是搜索出来的结果
 ```
 
-#### 7.monitor()
+
+
+#### 7.monitor()方法
 
 ```java
 public List<MFileInfo> monitor(String mainTypeId,
@@ -378,13 +393,13 @@ List<MFileInfo> monitorFileInfo = myFtp.monitor(mainType,subType,startTime,endTi
     filesToMonitor);//filesToMonitor是上传或者下载的文件列表
 ```
 
-#### 8. listFile()
+#### 8. listFile()方法
 
 ```java
 public List<FTPFileInfo> listFile(String mainType, String subType)
 ```
 
-##### 方法功能：根据数据类型查看所有的文件详细信息
+##### 方法说明：根据数据类型查看所有的文件详细信息
 
 ##### 返回值：所有文件列表
 
@@ -404,17 +419,21 @@ String subType = "sub_001";          // 数据小类：原始数据文件
 List<FTPFileInfo> listFiles = myFtp.listFile(mainType,subType);
 ```
 
-#### 9. logout()
+#### 9. logout()方法
 
 ```java
 public void logout()
 ```
 
-##### 方法功能：退出登录
+##### 方法说明：当前用户退出登录
 
-### 类：MFileInfo
 
-#### 属性：
+
+### MFileInfo类
+
+#### 类说明：监控实体类
+
+#### 属性说明：
 
 | 类型   | 属性名          | 解释               |
 | ------ | --------------- | ------------------ |
@@ -427,9 +446,11 @@ public void logout()
 
 
 
-### 类：FTPFile
+### FTPFile类
 
-#### 属性：
+#### 类说明：文件实体类，上传时只需要提供name和path
+
+#### 属性说明：
 
 | 类型   | 属性名 | 解释         |
 | ------ | ------ | ------------ |
@@ -438,17 +459,19 @@ public void logout()
 | String | path   | 文件路径     |
 | String | year   | 文件上传年份 |
 
-### 类：QueryParam
+### QueryParam类
 
-#### 方法：
+#### 类说明：查询实体类
 
-获取所有参数项
+#### 方法说明：
+
+1. 获取所有参数项
 
 ``` java
 public Map<String,Param> getParams()
 ```
 
-获取某一个参数项
+2. 获取某一个参数项
 
 ```java
 public Param getParam(String name)
@@ -458,7 +481,7 @@ public Param getParam(String name)
 | ------ | ------ | -------- |
 | String | name   | 参数名字 |
 
-设置查询值
+3. 设置查询值
 
 ```java
 public void setParam(Param param, String paramValue)
@@ -481,18 +504,11 @@ String upload_time = "2020-11-12";//上传时间
 queryParam.setParam(queryParam.getParam("upload_time"),upload_time);
 ```
 
-### 类：FileResult 
+### Param类
 
-#### 属性：
+#### 类说明： 查询参数类
 
-| 类型                | 属性名       | 解释         |
-| ------------------- | ------------ | ------------ |
-| String              | name         | 文件名       |
-| int                 | originalSize | 文件原始大小 |
-| int                 | size         | 文件大小     |
-| FileOperationStatus | status       | 操作状态     |
-
-### 类：Param
+#### 属性说明：
 
 | 查询参数名称 | 解释                  | 查询值示例  |
 | ------------ | --------------------- | ----------- |
@@ -509,3 +525,15 @@ queryParam.setParam(queryParam.getParam("upload_time"),upload_time);
 | order        | 排序规则              | desc/aesc   |
 | upload_time  | 上传时间              | 2020-10-16  |
 
+### FileResult类
+
+#### 类说明： 文件操作结果类
+
+#### 属性说明：
+
+| 类型                | 属性名       | 解释         |
+| ------------------- | ------------ | ------------ |
+| String              | name         | 文件名       |
+| int                 | originalSize | 文件原始大小 |
+| int                 | size         | 文件大小     |
+| FileOperationStatus | status       | 操作状态     |

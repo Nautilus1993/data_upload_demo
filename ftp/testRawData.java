@@ -27,7 +27,7 @@ public class testRawData {
             // 待上传文件列表
             List<FTPFile> ftpFiles = new ArrayList<>();
             String localPath = "C:\\Users\\qrs\\Desktop";
-            String file = "CT_TL1A2_SZ12_20201028052556_20201028052556_20201028052556_M_00001.raw";
+            String file = "CT_TL1A2_SZ12_20221028052556_20201028052556_20201028052556_M_00001.raw";
             ftpFiles.add(new FTPFile(file,localPath));
             file = "CT_TL1A2_SZ12_20211028052556_20201028052556_20201028052556_M_00001.raw";//PA_EN_TGTH_GCYC_00_GCYC_20200817234411_20200817234411_20220817234411_000.raw
             ftpFiles.add(new FTPFile(file,localPath));
@@ -117,6 +117,10 @@ public class testRawData {
             /************   下载文件    ************/
             String downloadPath = "D:\\hanbing"; //下载到本地路径
             result[0] = myFtp.startDownload(downloadPath,filesToDownload);
+            List<String> fileNames = new ArrayList<>();
+            fileNames.add(file);//文件名称列表
+            result[0] = myFtp.startDownload(mainType, subType, downloadPath, fileNames) ;
+
 
             /************   文件监控 -下载监控   ************/
             List<MFileInfo> downloadMmFileInfo = myFtp.monitor(mainType,subType,startTime,endTime,filesToDownload);

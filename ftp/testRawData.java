@@ -62,7 +62,7 @@ public class testRawData {
             String endTime = "2022-10-24 15:36:02";//结束监控时间
             List<MFileInfo> uploadMmFileInfo ;
             boolean isMonitor = true;
-            while (null==result[0] && isMonitor){
+            while (null==result[0] || isMonitor){
                 TimeUnit.MILLISECONDS.sleep(2000);
                 uploadMmFileInfo = myFtp.monitor(mainType,subType,startTime,endTime,ftpFiles);
                 //TODO: 打印进度，上传速度 kb/s

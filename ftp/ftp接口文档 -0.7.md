@@ -1,29 +1,12 @@
 ## 简介
 
-​       此文档为使用云平台文件数据归档API上传方式的用户撰写，传输协议使用FTP。请按照**运行使用说明**部署项目并运行，**API使用说明**包含所有方法接口和参数说明
-
-## 运行使用说明
-
-1. 从 ftp 目录下载jar包（FTPClientSDK.jar）和测试文档testRawData.java，github地址：<https://github.com/Nautilus1993/data_upload_demo/tree/main/ftp>
-
-2. 到挂载9000机器上，打开idea并且新建项目，导入测试文档testRawData.java，导入jar包FTPClientSDK.jar
-
-3. 根据实际情况，修改 testRawData.java文件里的变量值，如：
-
-   | 变量名       | 变量说明     |
-   | ------------ | ------------ |
-   | localPath    | 上传文件路径 |
-   | file         | 上传文件名称 |
-   | upload_time  | 查询参数等   |
-   | downloadPath | 下载文件路径 |
-
-   
+​       此文档为云平台文件数据归档API，传输协议采用FTP方式。**API使用说明**包含项目中所有类、方法接口和参数说明。
 
 ## API 使用说明
 
 ### FTPTransferClient类
 
-#### 类说明：上传引擎类
+#### 类说明：上传引擎类，包含FTP建立连接、上传、下载、查询、进度监控、退出功能
 
 #### 方法说明：
 
@@ -34,12 +17,12 @@
 public FTPTransferClient(String userName,String password)
 ```
 
-##### 方法说明：初始化FTPTransferClient用例
+##### 方法说明：初始化FTPTransferClient用例：用户认证登录并获取相应FTP用户
 
-| 参数     | 解释         |
-| -------- | ------------ |
-| userName | portal用户名 |
-| password | 密码         |
+| 参数     | 解释   | 类型   | 说明               |
+| -------- | ------ | ------ | ------------------ |
+| userName | 用户名 | String | 与portal用户名一致 |
+| password | 密码   | String | 与portal密码一致   |
 
 ##### 返回值：FTPTransferClient 
 
@@ -64,15 +47,15 @@ public List<FTPFile> searchFiles(String mainType,
                                  int page_number)throws Exception
 ```
 
-##### 方法说明：分页搜索文件
+##### 方法说明：使用数据类型和查询条件进行分页搜索文件
 
-| 参数         | 解释                           |
-| ------------ | ------------------------------ |
-| mainType     | 数据类型大类                   |
-| subType      | 数据类型小类                   |
-| query_params | 查询参数                       |
-| page_size    | 每页数量                       |
-| page_number  | 当前页，从1开始（为0查询所有） |
+| 参数         | 解释                                             | 类型       | 说明                       |
+| ------------ | ------------------------------------------------ | ---------- | -------------------------- |
+| mainType     | 数据类型大类                                     | String     | 参见《中心-数据类型》文档  |
+| subType      | 数据类型小类                                     | String     | 参见《中心-数据类型》文档  |
+| query_params | 查询参数 ，根据归档元信息查询，类型在xml文件配置 | QueryParam | 见下文QueryParam和Param类  |
+| page_size    | 每页数量                                         | int        | 分页查询中每一页的查询数量 |
+| page_number  | 当前页，从1开始（为0查询所有）                   | int        | 分页查询返回页码           |
 
 ##### 返回值：文件信息集合List<FTPFile>
 
@@ -93,10 +76,11 @@ List<FTPFile> filesToDownload = myFtp.searchFile(mainType,subType,              
 
 ##### 异常：Exception
 
-```
-NullPointerException：查询参数不存在
-RuntimeException：查询参数不合法
-```
+| 异常                      | 解释           |
+| ------------------------- | -------------- |
+| ParameterIllegalException | 查询参数不合法 |
+
+
 
 #### 3.startDownload()方法
 
@@ -108,24 +92,24 @@ public FileOperationResult startDownload(String localPath,List<FTPFile> filesToD
 
 ##### 方法说明：文件下载，下载由search方法返回搜索结果的文件
 
-| 参数            | 解释             |
-| --------------- | ---------------- |
-| filesToDownload | 要下载的文件列表 |
-| localPath       | 下载到的本地路径 |
+| 参数            | 解释             | 类型          | 说明                                                         |
+| --------------- | ---------------- | ------------- | ------------------------------------------------------------ |
+| filesToDownload | 要下载的文件列表 | List<FTPFile> | 该list由search方法返回的搜索文件列表，非用户手动构建，FTPFile类型见下文 |
+| localPath       | 下载到的本地路径 | String        | 路径结尾不需要分隔符                                         |
 
 ##### 返回值：FileOperationResult文件操作结果
 
-| 类型                   | 参数            | 解释                   |
-| ---------------------- | --------------- | ---------------------- |
-| FileOperationStatus    | status          | 文件的操作状态         |
-| List<String>           | failFiles       | 文件操作失败的文件列表 |
-| Date                   | acceptDateEnd   | 结束接收时间           |
-| Date                   | acceptDateStart | 开始接收时间           |
-| Integer                | dataCount       | 数据量-文件个数        |
-| String                 | dataSource      | 数据来源-文件中心      |
-| String                 | mainType        | 数据大类               |
-| String                 | subType         | 数据小类               |
-| Map<String,FileResult> | fileResults     | 数据操作结果           |
+| 属性            | 解释               | 类型                   | 说明                                                   |
+| --------------- | ------------------ | ---------------------- | ------------------------------------------------------ |
+| status          | 文件的操作状态     | FileOperationStatus    | 见下文FileOperationStatus枚举状态                      |
+| failFiles       | 下载失败的文件列表 | List<String>           | 如果下载成功，failFiles为空                            |
+| acceptDateEnd   | 结束下载时间       | Date                   | 本次下载操作结束时间                                   |
+| acceptDateStart | 开始下载时间       | Date                   | 本次下载操作开始时间                                   |
+| dataCount       | 数据量-文件个数    | Integer                | 本次下载操作文件数量                                   |
+| dataSource      | 数据来源-文件中心  | String                 | 下载文件所属中心                                       |
+| mainType        | 数据大类           | String                 | 下载文件所属大类，参见《中心-数据类型》文档            |
+| subType         | 数据小类           | String                 | 下载文件所属小类，参见《中心-数据类型》文档            |
+| fileResults     | 下载操作结果       | Map<String,FileResult> | 文件名-该文件下载结果 键值对，FileResult类型介绍见下文 |
 
 ##### FileOperationStatus枚举状态
 
@@ -154,12 +138,12 @@ public FileOperationResult startDownload(String mainType,
 
 ##### 方法说明：根据文件名称直接下载文件
 
-| 参数            | 解释                 |
-| --------------- | -------------------- |
-| mainType        | 数据类型大类         |
-| subType         | 数据类型小类         |
-| localPath       | 下载到的本地路径     |
-| filesToDownload | 要下载的文件名称列表 |
+| 参数      | 解释                 | 类型         | 说明                                        |
+| --------- | -------------------- | ------------ | ------------------------------------------- |
+| mainType  | 数据类型大类         | String       | 下载文件所属大类，参见《中心-数据类型》文档 |
+| subType   | 数据类型小类         | String       | 下载文件所属小类，参见《中心-数据类型》文档 |
+| localDir  | 下载到的本地路径     | String       | 路径结尾不需要分隔符                        |
+| fileNames | 要下载的文件名称列表 | List<String> |                                             |
 
 ##### 返回值：FileOperationResult 文件操作结果
 
@@ -188,10 +172,10 @@ public List getTags()
 
 ##### Tag类属性：
 
-| 类型   | 属性名  | 解释   |
-| ------ | ------- | ------ |
-| String | tagName | 标签名 |
-| String | tagID   | 标签ID |
+| 属性名  | 解释   | 类型   | 说明                               |
+| ------- | ------ | ------ | ---------------------------------- |
+| tagName | 标签名 | String | 标签介绍，用户可以在portal界面创建 |
+| tagID   | 标签ID | String | 上传时需要传入tagID列表            |
 
 ##### 使用示例
 
@@ -214,29 +198,29 @@ public FileOperationResult startUpload(String cabin，
                                 List<FTPFile> filesToUpload)throws Exception
 ```
 
-##### 方法说明：文件上传，从文件名提取元信息方法上传
+##### 方法说明：文件上传，归档时从文件名提取元信息
 
-| 参数          | 解释               |
-| ------------- | ------------------ |
-| cabin         | 舱段代号           |
-| mianType      | 数据类型大类代号   |
-| subType       | 数据类型小类代号   |
-| tagList       | 标签列表           |
-| filesToUpload | 批量上传的文件集合 |
+| 参数          | 解释               | 类型          | 说明                                    |
+| ------------- | ------------------ | ------------- | --------------------------------------- |
+| cabin         | 舱段代号           | String        | 舱段ID                                  |
+| mianType      | 数据类型大类代号   | String        | 文件所属大类，参见《中心-数据类型》文档 |
+| subType       | 数据类型小类代号   | String        | 文件所属小类，参见《中心-数据类型》文档 |
+| tagList       | 标签列表           | List<String>  | 允许为空                                |
+| filesToUpload | 批量上传的文件集合 | List<FTPFile> | 上传只需提供FTPFile类中name和path属性   |
 
 ##### 返回值：FileOperationResult文件操作结果
 
-| 类型                   | 参数            | 解释                   |
-| ---------------------- | --------------- | ---------------------- |
-| FileOperationStatus    | status          | 文件的操作状态         |
-| List<String>           | failFiles       | 文件操作失败的文件列表 |
-| Date                   | acceptDateEnd   | 结束接收时间           |
-| Date                   | acceptDateStart | 开始接收时间           |
-| Integer                | dataCount       | 数据量-文件个数        |
-| String                 | dataSource      | 数据来源-文件中心      |
-| String                 | mainType        | 数据大类               |
-| String                 | subType         | 数据小类               |
-| Map<String,FileResult> | fileResults     | 数据操作结果           |
+| 参数            | 解释                   | 类型                   | 说明                                                   |
+| --------------- | ---------------------- | ---------------------- | ------------------------------------------------------ |
+| status          | 文件的上传状态         | FileOperationStatus    | 见下文FileOperationStatus枚举状态                      |
+| failFiles       | 文件上传失败的文件列表 | List<String>           | 如果上传成功，failFiles为空                            |
+| acceptDateEnd   | 结束上传时间           | Date                   | 本次上传操作结束时间                                   |
+| acceptDateStart | 开始上传时间           | Date                   | 本次上传操作开始时间                                   |
+| dataCount       | 数据量-文件个数        | Integer                | 本次上传操作文件数量                                   |
+| dataSource      | 数据来源-文件中心      | String                 | 上传文件所属中心，参见《中心-数据类型》文档            |
+| mainType        | 数据大类               | String                 | 上传文件所属大类，参见《中心-数据类型》文档            |
+| subType         | 数据小类               | String                 | 上传文件所属小类，参见《中心-数据类型》文档            |
+| fileResults     | 数据上传结果           | Map<String,FileResult> | 文件名-该文件下载结果 键值对，FileResult类型介绍见下文 |
 
 ##### FileOperationStatus枚举状态
 
@@ -278,13 +262,13 @@ public FileOperationResult startUploadWithInfo(String cabin,
 
 ##### 方法功能：文件上传，需要用户手动录入归档元信息
 
-| 参数          | 解释                             |
-| ------------- | -------------------------------- |
-| cabin         | 舱段代号                         |
-| mianType      | 数据类型大类代号                 |
-| subType       | 数据类型小类代号                 |
-| tagList       | 标签列表                         |
-| uploadFileMap | 批量上传的文件和对应归档信息集合 |
+| 参数          | 解释                             | 类型                   | 说明                                                         |
+| ------------- | -------------------------------- | ---------------------- | ------------------------------------------------------------ |
+| cabin         | 舱段代号                         | String                 | 舱段ID                                                       |
+| mianType      | 数据类型大类代号                 | String                 | 上传文件所属大类，参见《中心-数据类型》文档                  |
+| subType       | 数据类型小类代号                 | String                 | 上传文件所属小类，参见《中心-数据类型》文档                  |
+| tagList       | 标签列表                         | List<String>           | 允许为空                                                     |
+| uploadFileMap | 批量上传的文件和对应归档信息集合 | Map<FTPFile, BaseFile> | 上传文件-归档信息 键值对，BaseFile类型为元信息基类，具体实现类见下文BioMedicalFile、DataResultAchieveReportFile、MedicalTestFile、MicroHazardousGasFile、SpaceSuitSensorFile |
 
 ##### 返回值：FileOperationResult文件操作结果
 
@@ -325,23 +309,13 @@ public FileOperationResult deleteFile(List<FTPFile> filesToDelete)throws Excepti
 
 ##### 方法说明：删除文件
 
-| 参数          | 解释             |
-| ------------- | ---------------- |
-| filesToDelete | 要删除的文件列表 |
+| 参数          | 解释             | 类型          | 说明                                                       |
+| ------------- | ---------------- | ------------- | ---------------------------------------------------------- |
+| filesToDelete | 要删除的文件列表 | List<FTPFile> | filesToDelete是搜索方法的结果，该FTPFile类型非用户手动构建 |
 
 ##### 返回值：FileOperationResult文件操作结果
 
-| 类型                   | 参数            | 解释                   |
-| ---------------------- | --------------- | ---------------------- |
-| FileOperationStatus    | status          | 文件的操作状态         |
-| List<String>           | failFiles       | 文件操作失败的文件列表 |
-| Date                   | acceptDateEnd   | 结束接收时间           |
-| Date                   | acceptDateStart | 开始接收时间           |
-| Integer                | dataCount       | 数据量-文件个数        |
-| String                 | dataSource      | 数据来源-文件中心      |
-| String                 | mainType        | 数据大类               |
-| String                 | subType         | 数据小类               |
-| Map<String,FileResult> | fileResults     | 数据操作结果           |
+
 
 ##### FileOperationStatus枚举状态
 
@@ -369,15 +343,15 @@ public List<MFileInfo> monitor(String mainTypeId,
                                List<FTPFile> filesToMonitor)
 ```
 
-##### 方法功能：文件监控
+##### 方法功能：监控上传或下载中文件的状态信息，包括传输进度，大小，状态
 
-| 参数           | 解释     |
-| -------------- | -------- |
-| mainTypeId     | 大类     |
-| subTypeId      | 小类     |
-| startTime      | 开始时间 |
-| endTime        | 结束时间 |
-| filesToMonitor | 文件集合 |
+| 参数           | 解释     | 类型          | 说明                                                        |
+| -------------- | -------- | ------------- | ----------------------------------------------------------- |
+| mainTypeId     | 大类     | String        | 被监控文件所属大类，参见《中心-数据类型》文档               |
+| subTypeId      | 小类     | String        | 被监控文件所属小类，参见《中心-数据类型》文档               |
+| startTime      | 开始时间 | String        | 时间格式为"yyyy-MM-dd HH:mm:ss" ，例如"2020-10-14 15:36:02" |
+| endTime        | 结束时间 | String        | 时间格式为"yyyy-MM-dd HH:mm:ss" ，例如"2020-10-14 15:36:02" |
+| filesToMonitor | 文件集合 | List<FTPFile> | 该集合是在调用上传/下载方法中的参数                         |
 
 ##### 返回值：MFileInfo 监控文件信息（见MFileInfo类）
 
@@ -393,22 +367,24 @@ List<MFileInfo> monitorFileInfo = myFtp.monitor(mainType,subType,startTime,endTi
     filesToMonitor);//filesToMonitor是上传或者下载的文件列表
 ```
 
+
+
 #### 8. listFile()方法
 
 ```java
 public List<FTPFileInfo> listFile(String mainType, String subType)
 ```
 
-##### 方法说明：根据数据类型查看所有的文件详细信息
+##### 方法说明：根据数据类型查看所有的文件详细信息，包括文件名，上传时间，文件大小
 
-##### 返回值：所有文件列表
+##### 返回值：所有文件列表List<FTPFileInfo>
 
 ##### Tag类属性：
 
-| 类型   | 属性名   | 解释     |
-| ------ | -------- | -------- |
-| String | mainType | 数据大类 |
-| String | subType  | 数据小类 |
+| 属性名   | 解释     | 类型   | 说明                                    |
+| -------- | -------- | ------ | --------------------------------------- |
+| mainType | 数据大类 | String | 文件所属大类，参见《中心-数据类型》文档 |
+| subType  | 数据小类 | String | 文件所属小类，参见《中心-数据类型》文档 |
 
 ##### 使用示例
 
@@ -419,6 +395,8 @@ String subType = "sub_001";          // 数据小类：原始数据文件
 List<FTPFileInfo> listFiles = myFtp.listFile(mainType,subType);
 ```
 
+
+
 #### 9. logout()方法
 
 ```java
@@ -427,22 +405,29 @@ public void logout()
 
 ##### 方法说明：当前用户退出登录
 
+使用示例
+
+``` java
+//退出登录，断开连接
+myFtp.logout()
+```
+
 
 
 ### MFileInfo类
 
-#### 类说明：监控实体类
+#### 类说明：文件监控实体类，监控方法返回该对象列表
 
 #### 属性说明：
 
-| 类型   | 属性名          | 解释               |
-| ------ | --------------- | ------------------ |
-| Long   | currentSize     | 文件目前大小       |
-| String | fileName        | 文件名称           |
-| Long   | fileSize        | 文件大小           |
-| String | percentage      | 文件目前大小百分比 |
-| Date   | operationTime   | 文件操作时间       |
-| String | operationStatus | 文件操作状态       |
+| 属性名          | 解释               | 类型   | 说明 |
+| --------------- | ------------------ | ------ | ---- |
+| currentSize     | 文件目前大小       | Long   |      |
+| fileName        | 文件名称           | String |      |
+| fileSize        | 文件大小           | Long   |      |
+| percentage      | 文件目前大小百分比 | String |      |
+| operationTime   | 文件操作时间       | Date   |      |
+| operationStatus | 文件操作状态       | String |      |
 
 
 
@@ -452,12 +437,14 @@ public void logout()
 
 #### 属性说明：
 
-| 类型   | 属性名 | 解释         |
-| ------ | ------ | ------------ |
-| String | id     | ID           |
-| String | name   | 文件名       |
-| String | path   | 文件路径     |
-| String | year   | 文件上传年份 |
+| 属性名 | 解释         | 类型   | 说明                                                  |
+| ------ | ------------ | ------ | ----------------------------------------------------- |
+| id     | ID           | String | 文件在数据库中唯一主键                                |
+| name   | 文件名       | String | 文件全称                                              |
+| path   | 文件路径     | String | 上传文件路径（分隔符建议用"/"，结尾路径不需要分隔符） |
+| year   | 文件上传年份 | String | 文件上传时所在年                                      |
+
+
 
 ### QueryParam类
 
@@ -477,9 +464,9 @@ public Map<String,Param> getParams()
 public Param getParam(String name)
 ```
 
-| 类型   | 属性名 | 解释     |
-| ------ | ------ | -------- |
-| String | name   | 参数名字 |
+| 属性名 | 解释     | 类型   | 说明                                                         |
+| ------ | -------- | ------ | ------------------------------------------------------------ |
+| name   | 参数名字 | String | 归档元信息名称，具体名称可通过getParams()方法查看，示例参照下文Param类查询参数名称 |
 
 3. 设置查询值
 
@@ -487,10 +474,10 @@ public Param getParam(String name)
 public void setParam(Param param, String paramValue)
 ```
 
-| 类型   | 属性名     | 解释     |
-| ------ | ---------- | -------- |
-| Param  | param      | 查询参数 |
-| String | paramValue | 参数值   |
+| 属性名     | 解释     | 类型   | 说明                              |
+| ---------- | -------- | ------ | --------------------------------- |
+| param      | 查询参数 | Param  | 可通过getParam()方法获取param对象 |
+| paramValue | 参数值   | String | 对应查询参数的查询值              |
 
 用法
 
@@ -504,26 +491,27 @@ String upload_time = "2020-11-12";//上传时间
 queryParam.setParam(queryParam.getParam("upload_time"),upload_time);
 ```
 
+
+
 ### Param类
 
 #### 类说明： 查询参数类
 
 #### 属性说明：
 
-| 查询参数名称 | 解释                  | 查询值示例  |
-| ------------ | --------------------- | ----------- |
-| dlsc         | 下行舱段标识/任务标识 | TGTH        |
-| dtg          | 数据集合标识          | GCYC        |
-| dty          | 数据类型标识          | GCYC        |
-| eid          | 明密标识              | UE          |
-| data_end     | 数据接收结束时间      | 2020-10-16  |
-| data_start   | 数据接收开始时间      | 2020-10-16  |
-| file_create  | 文件产生时间          | 2020-10-16  |
-| er           | 数据包状态            | 000         |
-| suffix       | 文件扩展名            | .raw        |
-| sort         | 排序字段              | upload_time |
-| order        | 排序规则              | desc/aesc   |
-| upload_time  | 上传时间              | 2020-10-16  |
+| 查询参数名称 | 解释                  | 类型   | 查询值示例 |
+| ------------ | --------------------- | ------ | ---------- |
+| dlsc         | 下行舱段标识/任务标识 | String | TGTH       |
+| dtg          | 数据集合标识          | String | GCYC       |
+| dty          | 数据类型标识          | String | GCYC       |
+| eid          | 明密标识              | String | UE         |
+| data_end     | 数据接收结束时间      | String | 2020-10-16 |
+| data_start   | 数据接收开始时间      | String | 2020-10-16 |
+| file_create  | 文件产生时间          | String | 2020-10-16 |
+| er           | 数据包状态            | String | 000        |
+| suffix       | 文件扩展名            | String | .raw       |
+
+
 
 ### FileResult类
 
@@ -531,9 +519,94 @@ queryParam.setParam(queryParam.getParam("upload_time"),upload_time);
 
 #### 属性说明：
 
-| 类型                | 属性名       | 解释         |
-| ------------------- | ------------ | ------------ |
-| String              | name         | 文件名       |
-| int                 | originalSize | 文件原始大小 |
-| int                 | size         | 文件大小     |
-| FileOperationStatus | status       | 操作状态     |
+| 属性名       | 解释         | 类型                | 说明                               |
+| ------------ | ------------ | ------------------- | ---------------------------------- |
+| name         | 文件名       | String              |                                    |
+| originalSize | 文件原始大小 | int                 |                                    |
+| size         | 文件大小     | int                 |                                    |
+| status       | 操作状态     | FileOperationStatus | 见上传和下载方法的具体操作状态枚举 |
+
+
+
+### BasicFile
+
+#### 类说明：手动上传时，附带归档元信息基类
+
+| 属性名 | 解释   | 类型   | 说明         |
+| ------ | ------ | ------ | ------------ |
+| id     | 文件ID | String | 文件唯一标识 |
+| fileId | 文件ID | String | 文件唯一标识 |
+
+#### BasicFile实现类
+
+1. ##### BioMedicalFile：生理数据文件
+
+| 属性名       | 解释         | 类型   | 说明 |
+| ------------ | ------------ | ------ | ---- |
+| deviceId     | 设备ID       | Short  |      |
+| humanId      | 人员信息     | Byte   |      |
+| fileTime     | 文件创建时间 | Date   |      |
+| fileFullName | 文件名       | String |      |
+| cabin        | 所属飞行器   | String |      |
+| flyStage     | 所属飞行阶段 | String |      |
+| fileType     | 文件类型     | String |      |
+
+2. ##### DataResultAchieveReportFile ：数据成果和成果报告文件元信息表
+
+| 属性名           | 解释           | 类型   | 说明 |
+| ---------------- | -------------- | ------ | ---- |
+| mission          | 任务代号       | String |      |
+| achieveKind      | 数据成果类型   | String |      |
+| achieveName      | 数据成果名称   | String |      |
+| achieveFrom      | 数据成果来源   | String |      |
+| achieveCopyright | 数据成果版权方 | String |      |
+| founder          | 创建人         | String |      |
+| founderTime      | 创建时间       | Date   |      |
+| descOfAchievs    | 成果描述       | String |      |
+| format           | 数据成果格式   | String |      |
+
+3. ##### MedicalTestFile：航天医学实验数据文件表
+
+| 属性名       | 解释         | 类型         | 说明 |
+| ------------ | ------------ | ------------ | ---- |
+| itemId       | 项目ID       | Short        |      |
+| deviceId     | 设备ID       | Short        |      |
+| fileTime     | 文件创建时间 | Date         |      |
+| fileFullName | 文件名       | String       |      |
+| cabin        | String       | 所属飞行器   |      |
+| flyStage     | String       | 所属飞行阶段 |      |
+| fileType     | String       | 文件类型     |      |
+| indentity    | String       | 文件标识     |      |
+| comment      | String       | 备注         |      |
+
+4. ##### MicroHazardousGasFile：微量气体检测装备数据文件
+
+| 属性名       | 解释         | 类型   | 说明 |
+| ------------ | ------------ | ------ | ---- |
+| fileTime     | 文件创建时间 | Date   |      |
+| fileFullName | 文件名       | String |      |
+| cabin        | 所属飞行器   | String |      |
+| flyStage     | 所属飞行阶段 | String |      |
+| fileType     | 文件类型     | String |      |
+| indentity    | 文件标识     | String |      |
+| comment      | 备注         | String |      |
+
+5. ##### SpaceSuitSensorFile：舱外服上注传感器系数数据文件
+
+| 属性名       | 解释         | 类型   | 说明 |
+| ------------ | ------------ | ------ | ---- |
+| fileTime     | 文件创建时间 | Date   |      |
+| fileFullName | 文件名       | String |      |
+
+
+
+### FTPFileInfo
+
+类描述：FTP 云存储文件 文件详情信息
+
+| 属性名     | 解释     | 类型   | 说明 |
+| ---------- | -------- | ------ | ---- |
+| fileName   | 文件名称 | String |      |
+| uploadTime | 上传时间 | Date   |      |
+| fileSize   | 文件大小 | Long   |      |
+

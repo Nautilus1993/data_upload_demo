@@ -4,7 +4,8 @@ import com.bjsasc.FTPClientSDK.model.entry.*;
 import com.bjsasc.FTPClientSDK.model.enu.FileOperationStatus;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -13,7 +14,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @version 0.3 实现中文目录创建及中文文件创建，添加对于中文的支持
  */
-public class testRawData {
+public class testRawData_upload {
     public static void main(String[] args) {
         //用户名
         String USERNAME = "test_user_1";
@@ -101,32 +102,6 @@ public class testRawData {
                     }
                     break;
             }
-
-            /************   文件搜索 （搜索出要下载的文件）   ************/
-            int pageSize = 10; //分页大小
-            int pageNum = 1; //页码
-            //查询条件 初始化
-            QueryParam queryParam = new QueryParam();
-            //查看所有查询字段 param
-            Map<String,Param> map = queryParam.getParams();
-            String upload_time = "2020-11-12";//上传时间
-            queryParam.setParam(queryParam.getParam("upload_time"),upload_time);
-            //查询
-            List<FTPFile> filesToDownload = myFtp.searchFile(mainType,subType,queryParam,pageSize,pageNum);
-
-            /************   下载文件    ************/
-            String downloadPath = "D:\\hanbing"; //下载到本地路径
-            result[0] = myFtp.startDownload(downloadPath,filesToDownload);
-            List<String> fileNames = new ArrayList<>();
-            fileNames.add(file);//文件名称列表
-            result[0] = myFtp.startDownload(mainType, subType, downloadPath, fileNames) ;
-
-
-            /************   文件监控 -下载监控   ************/
-            List<MFileInfo> downloadMmFileInfo = myFtp.monitor(mainType,subType,startTime,endTime,filesToDownload);
-
-            /************   文件列表    ************/
-            List<FTPFileInfo> listFiles = myFtp.listFile(mainType,subType);
 
             //断开连接
             myFtp.logout();

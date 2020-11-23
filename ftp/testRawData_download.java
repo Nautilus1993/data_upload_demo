@@ -64,7 +64,7 @@ public class testRawData_download {
             //断开连接
             myFtp.logout();
         } catch (Exception e) {
-            log.error("操作FTP出错，抛出异常：{}" ,e);
+            System.out.println("操作FTP出错，抛出异常：{}" +e);
         }
     }
 

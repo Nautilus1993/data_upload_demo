@@ -511,7 +511,100 @@ queryParam.setParam(queryParam.getParam("upload_time"),upload_time);
 | er           | 数据包状态            | String | 000        |
 | suffix       | 文件扩展名            | String | .raw       |
 
+pmc-main_001-sub_001
 
+| 查询参数名称 | 解释                  | 类型   | 查询值示例 |
+| ------------ | --------------------- | ------ | ---------- |
+| st           | 接收站/数据来路标识   | String | CT         |
+| tl           | 中继星标识            | String | TL1A2      |
+| mid          | 下行舱段标识/任务标识 | String | SZ12       |
+| data_start   | 文件开始时间          | Date   | 2020-10-16 |
+| data_end     | 文件结束时间          | Date   | 2020-10-16 |
+| file_create  | 文件产生时间          | Date   | 2020-10-16 |
+| mb           | 前端接收主备机标识    | String | M          |
+| no           | 序号标识              | String | 00001      |
+| suffix       | 文件扩展名            | String | raw        |
+
+pmc-main_002-sub_002:
+
+| 查询参数名称 | 解释                  | 类型   | 查询值示例 |
+| ------------ | --------------------- | ------ | ---------- |
+| dlsc         | 下行舱段标识/任务标识 | String | TGTH       |
+| dtg          | 数据集合标识          | String | GCYC       |
+| dty          | 数据类型标识          | String | GCYC       |
+| eid          | 明密标识              | String | UE         |
+| data_end     | 数据接收结束时间      | String | 2020-10-16 |
+| data_start   | 数据接收开始时间      | String | 2020-10-16 |
+| file_create  | 文件产生时间          | String | 2020-10-16 |
+| er           | 数据包状态            | String | 000        |
+| suffix       | 文件扩展名            | String | .raw       |
+| st           | 接收站/数据来路标识   | String | CT         |
+| le           | 数据级别              | String | 00         |
+| er           | 数据包状态            | String | 000        |
+
+pmc-main_003-sub_003:
+
+| 查询参数名称 | 解释                  | 类型   | 查询值示例 |
+| ------------ | --------------------- | ------ | ---------- |
+| creator      | 生产者标志            | String | SADC       |
+| dlsc         | 下行舱段标识/任务标识 | String | TGTH       |
+| fstr         | 文件开始时间          | Date   | 2020-10-16 |
+| fend         | 文件结束时间          | Date   | 2020-10-16 |
+| fcreate      | 文件产生时间          | Date   | 2020-10-16 |
+| fbak         | 文件归档时间          | Date   | 2020-10-16 |
+| suffix       | 文件扩展名            | String | dat        |
+
+pmc-main_003-sub_004:
+
+| 查询参数名称 | 解释                  | 类型   | 查询值示例 |
+| ------------ | --------------------- | ------ | ---------- |
+| creator      | 生产者标志            | String | SADC       |
+| dlsc         | 下行舱段标识/任务标识 | String | TGTH       |
+| fstr         | 文件开始时间          | Date   | 2020-10-16 |
+| fend         | 文件结束时间          | Date   | 2020-10-16 |
+| fcreate      | 文件产生时间          | Date   | 2020-10-16 |
+| fbak         | 文件归档时间          | Date   | 2020-10-16 |
+| suffix       | 文件扩展名            | String | dat        |
+
+pmc-main_003-sub_005:
+
+| 查询参数名称 | 解释                  | 类型   | 查询值示例 |
+| ------------ | --------------------- | ------ | ---------- |
+| creator      | 生产者标志            | String | SE         |
+| dlsc         | 下行舱段标识/任务标识 | String | TGTH       |
+| symbol       | 文件标志              | String | CQYBPG     |
+| fstr         | 文件开始时间          | Date   | 2020-10-16 |
+| fend         | 文件结束时间          | Date   | 2020-10-16 |
+| fcreate      | 文件产生时间          | Date   | 2020-10-16 |
+| fbak         | 文件归档时间          | Date   | 2020-10-16 |
+| suffix       | 文件扩展名            | String | CQYBPG     |
+
+pmc-main_003-sub_006:
+
+| 查询参数名称 | 解释                  | 类型   | 查询值示例 |
+| ------------ | --------------------- | ------ | ---------- |
+| creator      | 生产者标志            | String | SE         |
+| dlsc         | 下行舱段标识/任务标识 | String | TGTH       |
+| symbol       | 文件标志              | String | CQYBPG     |
+| explain      | 数据说明              | String | ABCD       |
+| fstr         | 文件开始时间          | Date   | 2020-10-16 |
+| fend         | 文件结束时间          | Date   | 2020-10-16 |
+| fcreate      | 文件产生时间          | Date   | 2020-10-16 |
+| fbak         | 文件归档时间          | Date   | 2020-10-16 |
+| suffix       | 文件扩展名            | String | CQYBPG     |
+
+pmc-main_004-sub_007:
+
+| 查询参数名称 | 解释             | 类型   | 查询值示例 |
+| ------------ | ---------------- | ------ | ---------- |
+| pr           | 文件生产者       | String | PA         |
+| sc           | 任务标识         | String | TGTH       |
+| dty          | 文件标识         | String | XX         |
+| fd           | 文件其他属性说明 | String | XXXX       |
+| data_end     | 文件结束时间     | String | 2020-10-16 |
+| data_start   | 文件开始时间     | String | 2020-10-16 |
+| gen_time     | 文件产生时间     | String | 2020-10-16 |
+| ext          | 文件扩展名       | String | XML        |
 
 ### FileResult类
 

@@ -28,10 +28,10 @@ public class testRawData_upload {
             // 待上传文件列表
             List<FTPFile> ftpFiles = new ArrayList<>();
             String localPath = "C:\\Users\\qrs\\Desktop";
-            String file = "CT_TL1A2_SZ12_20221028052556_20201028052556_20201028052556_M_00001.raw";
+            String file = "CT_TL1A2_SZ12_20231028052556_20201028052556_20201028052556_M_00001.raw";
             ftpFiles.add(new FTPFile(file,localPath));
-            file = "CT_TL1A2_SZ12_20211028052556_20201028052556_20201028052556_M_00001.raw";//PA_EN_TGTH_GCYC_00_GCYC_20200817234411_20200817234411_20220817234411_000.raw
-            ftpFiles.add(new FTPFile(file,localPath));
+//            file = "CT_TL1A2_SZ12_20211028052556_20201028052556_20201028052556_M_00001.raw";//PA_EN_TGTH_GCYC_00_GCYC_20200817234411_20200817234411_20220817234411_000.raw
+//            ftpFiles.add(new FTPFile(file,localPath));
 
             // 上传文件
             String mainType = "main_001";     // 数据大类：归档数据
@@ -50,7 +50,7 @@ public class testRawData_upload {
                 public void run() {
                     try {
                         System.out.println("开始调用上传");
-                        result[0] = myFtp.startUpload(cabin,mainType,subType, tagLabels,ftpFiles);
+                        result[0] = myFtp.startUpload(cabin,mainType,subType, null,ftpFiles);
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -80,25 +80,25 @@ public class testRawData_upload {
             FileOperationStatus status = result[0].getStatus();//文件上传状态
             switch (status){
                 case SUCCESS:
-                    log.info("用户上传成功");
+                    System.out.println("用户上传成功");
                     break;
                 case FORBIDDEN:
-                    log.error("用户没有上传权限");
+                    System.out.println("用户没有上传权限");
                 case CHECK_STANDARD_ERROR:
-                    log.error("检查规范性失败，失败文件名称列表：{}",result[0].getFailFiles());
+                    System.out.println("检查规范性失败，失败文件名称列表：{}"+result[0].getFailFiles());
                     break;
                 case CHECK_REPEATE_FILESELF_ERROR:
-                    log.error("检查重复性失败-文件本身存在重复，失败文件名称列表：{}",result[0].getFailFiles());
+                    System.out.println("检查重复性失败-文件本身存在重复，失败文件名称列表：{}"+result[0].getFailFiles());
                     break;
                 case CHECK_REPEATE_UPLOAD_ERROR:
-                    log.error("检查重复性失败-文件已经被上传，失败文件名称列表：{}", result[0].getFailFiles());
+                    System.out.println("检查重复性失败-文件已经被上传，失败文件名称列表：{}"+result[0].getFailFiles());
                     break;
                 case UPLOAD_ERROR:
-                    log.error("上传失败，失败文件名称列表：{}", result[0].getFailFiles());
+                    System.out.println("上传失败，失败文件名称列表：{}"+ result[0].getFailFiles());
                     //上传失败详细情况
                     for(String fileName :result[0].getFailFiles()){
                         FileResult fileResult = result[0].getFileResults().get(fileName);
-                        log.error("文件名：{}；上传状态：{}；原始大小：{}；上传大小：{}",fileResult.getName(),fileResult.getOriginalSize(),fileResult.getOriginalSize(),fileResult.getSize());
+                        System.out.println("文件名：{}；上传状态：{}；原始大小：{}；上传大小：{}"+fileResult.getName()+fileResult.getOriginalSize()+fileResult.getOriginalSize()+fileResult.getSize());
                     }
                     break;
             }
@@ -106,7 +106,7 @@ public class testRawData_upload {
             //断开连接
             myFtp.logout();
         } catch (Exception e) {
-            log.error("操作FTP出错，抛出异常：{}" ,e);
+            System.out.println("操作FTP出错，抛出异常：{}" +e);
         }
     }
 

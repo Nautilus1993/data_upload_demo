@@ -36,13 +36,13 @@ public class testRawData_download {
             int pageSize = 10; //分页大小
             int pageNum = 1; //页码
             //查询条件 初始化
-            QueryParam queryParam = new QueryParam();
+            QueryParam queryParam = new QueryParam(mainType,subType);
             //查看所有查询字段 param
             Map<String,Param> map = queryParam.getParams();
             String upload_time = "2020-11-12";//上传时间
             queryParam.setParam(queryParam.getParam("upload_time"),upload_time);
             //查询
-            List<FTPFile> filesToDownload = myFtp.searchFile(mainType,subType,queryParam,pageSize,pageNum);
+            List<FTPFile> filesToDownload = myFtp.searchFile(queryParam,pageSize,pageNum);
 
             /************   下载文件    ************/
             String downloadPath = "D:\\hanbing"; //下载到本地路径

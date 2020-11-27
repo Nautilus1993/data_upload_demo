@@ -28,10 +28,10 @@ public class testRawData_upload {
             // 待上传文件列表
             List<FTPFile> ftpFiles = new ArrayList<>();
             String localPath = "C:\\Users\\qrs\\Desktop";
-            String file = "CT_TL1A2_SZ12_20231028052556_20201028052556_20201028052556_M_00001.raw";
+            String file = "CT_TL1A2_SZ12_23231028052556_20201028052556_20201028052556_M_00001.raw";
             ftpFiles.add(new FTPFile(file,localPath));
-//            file = "CT_TL1A2_SZ12_20211028052556_20201028052556_20201028052556_M_00001.raw";//PA_EN_TGTH_GCYC_00_GCYC_20200817234411_20200817234411_20220817234411_000.raw
-//            ftpFiles.add(new FTPFile(file,localPath));
+            file = "CT_TL1A2_SZ12_20244028052556_20201028052556_20201028052556_M_00001.raw";//PA_EN_TGTH_GCYC_00_GCYC_20200817234411_20200817234411_20220817234411_000.raw
+            ftpFiles.add(new FTPFile(file,localPath));
 
             // 上传文件
             String mainType = "main_001";     // 数据大类：归档数据
@@ -62,18 +62,10 @@ public class testRawData_upload {
             String startTime = "2020-10-14 15:36:02";//开始监控时间
             String endTime = "2022-10-24 15:36:02";//结束监控时间
             List<MFileInfo> uploadMmFileInfo ;
-            boolean isMonitor = true;
-            while (null==result[0] || isMonitor){
+
+            while (null==result[0] ){
                 TimeUnit.MILLISECONDS.sleep(2000);
                 uploadMmFileInfo = myFtp.monitor(mainType,subType,startTime,endTime,ftpFiles);
-                //TODO: 打印进度，上传速度 kb/s
-                isMonitor = false;//结束监控
-                for(MFileInfo in : uploadMmFileInfo){
-                    if(!in.getPercentage().equals("100%")){
-                        System.out.println(in.getFileName()+" "+in.getPercentage()+" "+in.getSpeed());
-                        isMonitor = true;//继续监控
-                    }
-                }
             }
 
             /************   文件上传结果   ************/
@@ -84,16 +76,16 @@ public class testRawData_upload {
                     break;
                 case FORBIDDEN:
                     System.out.println("用户没有上传权限");
-                case CHECK_STANDARD_ERROR:
+                case Check_Standard_Error:
                     System.out.println("检查规范性失败，失败文件名称列表：{}"+result[0].getFailFiles());
                     break;
-                case CHECK_REPEATE_FILESELF_ERROR:
+                case Check_Repeat_File_Self_Error:
                     System.out.println("检查重复性失败-文件本身存在重复，失败文件名称列表：{}"+result[0].getFailFiles());
                     break;
-                case CHECK_REPEATE_UPLOAD_ERROR:
+                case Check_Repeat_Uploaded_Error:
                     System.out.println("检查重复性失败-文件已经被上传，失败文件名称列表：{}"+result[0].getFailFiles());
                     break;
-                case UPLOAD_ERROR:
+                case Upload_Error:
                     System.out.println("上传失败，失败文件名称列表：{}"+ result[0].getFailFiles());
                     //上传失败详细情况
                     for(String fileName :result[0].getFailFiles()){

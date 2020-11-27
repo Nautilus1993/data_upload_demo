@@ -40,9 +40,7 @@ FTPTransferClient myFtp = new FTPTransferClient(USERNAME, PASSWORD);
 #### 2.searchFiles()方法
 
 ```java
-public List<FTPFile> searchFiles(String mainType,
-                                 String subType,
-                                 QueryParam query_params，
+public List<FTPFile> searchFiles(QueryParam query_params，
                                  int page_size,
                                  int page_number)throws Exception
 ```
@@ -51,7 +49,6 @@ public List<FTPFile> searchFiles(String mainType,
 
 | 参数         | 解释                                             | 类型       | 说明                       |
 | ------------ | ------------------------------------------------ | ---------- | -------------------------- |
-| mainType     | 数据类型大类                                     | String     | 参见《中心-数据类型》文档  |
 | subType      | 数据类型小类                                     | String     | 参见《中心-数据类型》文档  |
 | query_params | 查询参数 ，根据归档元信息查询，类型在xml文件配置 | QueryParam | 见下文QueryParam和Param类  |
 | page_size    | 每页数量                                         | int        | 分页查询中每一页的查询数量 |
@@ -67,11 +64,11 @@ int pageNum = 1; //页码
 String mainType = "main_001";  // 数据大类：归档数据
 String subType = "sub_001";    // 数据小类：原始数据文件
 //查询条件
-QueryParam queryParam = new QueryParam();
+QueryParam queryParam = new QueryParam(mainType,subType);
 String upload_time = "2020-11-12";//上传时间
 queryParam.setParam(queryParam.getParam("upload_time"),upload_time);
 //查询
-List<FTPFile> filesToDownload = myFtp.searchFile(mainType,subType,                 queryParam,pageSize,pageNum);
+List<FTPFile> filesToDownload = myFtp.searchFile(queryParam,pageSize,pageNum);
 ```
 
 ##### 异常：Exception
@@ -82,7 +79,7 @@ List<FTPFile> filesToDownload = myFtp.searchFile(mainType,subType,              
 
 
 
-#### 3.startDownload()方法
+#### 3.startDownload()方法 下载成功个数，失败个数，一共多少个
 
 ##### 3.1 查询后下载
 
@@ -97,7 +94,7 @@ public FileOperationResult startDownload(String localPath,List<FTPFile> filesToD
 | filesToDownload | 要下载的文件列表 | List<FTPFile> | 该list由search方法返回的搜索文件列表，非用户手动构建，FTPFile类型见下文 |
 | localPath       | 下载到的本地路径 | String        | 路径结尾不需要分隔符                                         |
 
-##### 返回值：FileOperationResult文件操作结果
+##### 返回值：FilesOperationResult文件操作结果
 
 | 属性            | 解释               | 类型                   | 说明                                                   |
 | --------------- | ------------------ | ---------------------- | ------------------------------------------------------ |
@@ -106,6 +103,8 @@ public FileOperationResult startDownload(String localPath,List<FTPFile> filesToD
 | acceptDateEnd   | 结束下载时间       | Date                   | 本次下载操作结束时间                                   |
 | acceptDateStart | 开始下载时间       | Date                   | 本次下载操作开始时间                                   |
 | dataCount       | 数据量-文件个数    | Integer                | 本次下载操作文件数量                                   |
+| successCount    | 下载成功-文件个数  | Integer                | 本次下载操作文件成功数量                               |
+| errorCount      | 下载失败-文件个数  | Integer                | 本次下载操作文件失败数量                               |
 | dataSource      | 数据来源-文件中心  | String                 | 下载文件所属中心                                       |
 | mainType        | 数据大类           | String                 | 下载文件所属大类，参见《中心-数据类型》文档            |
 | subType         | 数据小类           | String                 | 下载文件所属小类，参见《中心-数据类型》文档            |
@@ -113,11 +112,16 @@ public FileOperationResult startDownload(String localPath,List<FTPFile> filesToD
 
 ##### FileOperationStatus枚举状态
 
-| 枚举常量       | 解释                                  |
-| -------------- | ------------------------------------- |
-| SUCCESS        | 操作成功                              |
-| DOWNLOAD_ERROR | 下载失败-本地文件已存在或者网络因素等 |
-| FORBIDDEN      | 访问受限，授权过期                    |
+| 枚举常量                  | 解释                                  |
+| ------------------------- | ------------------------------------- |
+| SUCCESS                   | 操作成功                              |
+| Download_Error            | 下载失败-本地文件已存在或者网络因素等 |
+| FORBIDDEN                 | 访问受限，授权过期                    |
+| Remote_File_No_Exist      | 远程服务器文件不存在                  |
+| Check_File_Size_Failed    | 文件大小完整性校验失败                |
+| Download_From_Break_Error | 断点下载文件失败                      |
+| Download_New_Error        | 全新下载文件失败                      |
+| File_Exits_Local          | 本地文件已经存在，请重命名            |
 
 ##### 使用示例
 
@@ -133,7 +137,7 @@ FileOperationResult result = myFtp.startDownload(downloadPath,
 public FileOperationResult startDownload(String mainType, 
                                          String subType,
                                          String localDir, 
-                                         List<String>fileNames) throws Exception 
+                                         List<String>fileNames) throws Exception 、、上线下线
 ```
 
 ##### 方法说明：根据文件名称直接下载文件
@@ -186,7 +190,7 @@ List<Tag> tagList = myFtp.getTags();
 
 
 
-#### 5. startUpload()方法
+#### 5. startUpload()方法   整体多尝试上传几次  taskID  所有中间状态都放在redis里面
 
 ##### 5.1 文件自动归档上传
 
@@ -202,7 +206,7 @@ public FileOperationResult startUpload(String cabin，
 
 | 参数          | 解释               | 类型          | 说明                                    |
 | ------------- | ------------------ | ------------- | --------------------------------------- |
-| cabin         | 舱段代号           | String        | 舱段ID                                  |
+| cabin         | 舱段代号           | String        | 舱段ID，默认值cabin_001                 |
 | mianType      | 数据类型大类代号   | String        | 文件所属大类，参见《中心-数据类型》文档 |
 | subType       | 数据类型小类代号   | String        | 文件所属小类，参见《中心-数据类型》文档 |
 | tagList       | 标签列表           | List<String>  | 允许为空                                |
@@ -217,6 +221,8 @@ public FileOperationResult startUpload(String cabin，
 | acceptDateEnd   | 结束上传时间           | Date                   | 本次上传操作结束时间                                   |
 | acceptDateStart | 开始上传时间           | Date                   | 本次上传操作开始时间                                   |
 | dataCount       | 数据量-文件个数        | Integer                | 本次上传操作文件数量                                   |
+| successCount    | 上传成功-文件个数      | Integer                | 本次上传操作文件成功数量                               |
+| errorCount      | 上传失败-文件个数      | Integer                | 本次上传操作文件失败数量                               |
 | dataSource      | 数据来源-文件中心      | String                 | 上传文件所属中心，参见《中心-数据类型》文档            |
 | mainType        | 数据大类               | String                 | 上传文件所属大类，参见《中心-数据类型》文档            |
 | subType         | 数据小类               | String                 | 上传文件所属小类，参见《中心-数据类型》文档            |
@@ -224,15 +230,28 @@ public FileOperationResult startUpload(String cabin，
 
 ##### FileOperationStatus枚举状态
 
-| 枚举常量                     | 解释                            |
-| ---------------------------- | ------------------------------- |
-| CHECK_REPEATE_FILESELF_ERROR | 检查重复性失败-文件本身存在重复 |
-| CHECK_REPEATE_UPLOAD_ERROR   | 检查重复性失败-文件已经被上传   |
-| CHECK_SIZE_ERROR             | 检查一致性失败                  |
-| CHECK_STANDARD_ERROR         | 检查规范性失败                  |
-| UPLOAD_ERROR                 | 上传失败                        |
-| SUCCESS                      | 操作成功                        |
-| FORBIDDEN                    | 访问受限，授权过期              |
+| 枚举常量                       | 解释                                  |
+| ------------------------------ | ------------------------------------- |
+| Check_Repeat_File_Self_Error   | 检查重复性失败-文件本身存在重复       |
+| Check_Repeat_Uploaded_Error    | 检查重复性失败-文件已经被上传         |
+| Check_Size_Error               | 检查一致性失败                        |
+| Check_Standard_Error           | 检查规范性失败                        |
+| Upload_Error                   | 上传失败                              |
+| SUCCESS                        | 操作成功                              |
+| FORBIDDEN                      | 访问受限，授权过期                    |
+| Check_Repeat_File_Modify_Error | 检查重复性失败-文件被修改过           |
+| Local_File_No_Exit             | 本地文件不存在或者文件大小为0         |
+| Not_Same_Task                  | 文件列表不属于同一批任务文件,禁止上传 |
+| Create_Directory_Error         | 服务器上传目录创建失败                |
+| Upload_New_File_Error          | 上传新文件失败                        |
+| Upload_From_Break_Error        | 断点续传失败                          |
+| File_Exits_Remote              | 远程服务器存在文件                    |
+| Check_File_Size_Error          | 服务器与本地文件大小完整性校验失败    |
+| Manager_Connect_Error          | 连接数据传输管理服务失败              |
+| Delete_Remote_Error            | 删除文件失败                          |
+| Meta_Info_Error                | 元信息提取异常,请查看元信息是否正确   |
+| Archive_Error                  | 归档失败                              |
+| Add_Dir_Time_Out               | 请求创建目录接口超时                  |
 
 ##### 使用示例
 
@@ -264,7 +283,7 @@ public FileOperationResult startUploadWithInfo(String cabin,
 
 | 参数          | 解释                             | 类型                   | 说明                                                         |
 | ------------- | -------------------------------- | ---------------------- | ------------------------------------------------------------ |
-| cabin         | 舱段代号                         | String                 | 舱段ID                                                       |
+| cabin         | 舱段代号                         | String                 | 舱段ID,，默认值cabin_001                                     |
 | mianType      | 数据类型大类代号                 | String                 | 上传文件所属大类，参见《中心-数据类型》文档                  |
 | subType       | 数据类型小类代号                 | String                 | 上传文件所属小类，参见《中心-数据类型》文档                  |
 | tagList       | 标签列表                         | List<String>           | 允许为空                                                     |
@@ -333,7 +352,7 @@ FileOperationResult result = myFtp.deleteFile(filesToDelete)；//filesToDelete�
 
 
 
-#### 7.monitor()方法
+#### 7.monitor()方法   :直接传任务号  
 
 ```java
 public List<MFileInfo> monitor(String mainTypeId,
@@ -452,13 +471,24 @@ myFtp.logout()
 
 #### 方法说明：
 
-1. 获取所有参数项
+1. 按照数据类型初始化查询实体类
+
+```java
+public QueryParam(String mainType,String subType)
+```
+
+| 属性名   | 解释     | 类型   | 说明                                    |
+| -------- | -------- | ------ | --------------------------------------- |
+| mainType | 数据大类 | String | 文件所属大类，参见《中心-数据类型》文档 |
+| subType  | 数据小类 | String | 文件所属小类，参见《中心-数据类型》文档 |
+
+2. 获取所有参数项
 
 ``` java
 public Map<String,Param> getParams()
 ```
 
-2. 获取某一个参数项
+3. 获取某一个参数项
 
 ```java
 public Param getParam(String name)
@@ -468,7 +498,7 @@ public Param getParam(String name)
 | ------ | -------- | ------ | ------------------------------------------------------------ |
 | name   | 参数名字 | String | 归档元信息名称，具体名称可通过getParams()方法查看，示例参照下文Param类查询参数名称 |
 
-3. 设置查询值
+4. 设置查询值
 
 ```java
 public void setParam(Param param, String paramValue)
@@ -479,11 +509,13 @@ public void setParam(Param param, String paramValue)
 | param      | 查询参数 | Param  | 可通过getParam()方法获取param对象 |
 | paramValue | 参数值   | String | 对应查询参数的查询值              |
 
-用法
+使用示例
 
 ```java
 //查询条件 初始化
-QueryParam queryParam = new QueryParam();
+String mainType = "main_001";     // 数据大类：归档数据
+String subType = "sub_001";          // 数据小类：原始数据文件
+QueryParam queryParam = new QueryParam(mainType,subType);
 //查看所有查询字段param
 Map<String,Param> map = queryParam.getParams();
 String upload_time = "2020-11-12";//上传时间
@@ -497,114 +529,123 @@ queryParam.setParam(queryParam.getParam("upload_time"),upload_time);
 
 #### 类说明： 查询参数类
 
-#### 属性说明：
-
-| 查询参数名称 | 解释                  | 类型   | 查询值示例 |
-| ------------ | --------------------- | ------ | ---------- |
-| dlsc         | 下行舱段标识/任务标识 | String | TGTH       |
-| dtg          | 数据集合标识          | String | GCYC       |
-| dty          | 数据类型标识          | String | GCYC       |
-| eid          | 明密标识              | String | UE         |
-| data_end     | 数据接收结束时间      | String | 2020-10-16 |
-| data_start   | 数据接收开始时间      | String | 2020-10-16 |
-| file_create  | 文件产生时间          | String | 2020-10-16 |
-| er           | 数据包状态            | String | 000        |
-| suffix       | 文件扩展名            | String | .raw       |
+#### 属性说明：排序 多个 升序降序
 
 pmc-main_001-sub_001
 
-| 查询参数名称 | 解释                  | 类型   | 查询值示例 |
-| ------------ | --------------------- | ------ | ---------- |
-| st           | 接收站/数据来路标识   | String | CT         |
-| tl           | 中继星标识            | String | TL1A2      |
-| mid          | 下行舱段标识/任务标识 | String | SZ12       |
-| data_start   | 文件开始时间          | Date   | 2020-10-16 |
-| data_end     | 文件结束时间          | Date   | 2020-10-16 |
-| file_create  | 文件产生时间          | Date   | 2020-10-16 |
-| mb           | 前端接收主备机标识    | String | M          |
-| no           | 序号标识              | String | 00001      |
-| suffix       | 文件扩展名            | String | raw        |
+| 查询参数名称 | 解释                  | 类型   | 查询值示例           |
+| ------------ | --------------------- | ------ | -------------------- |
+| sort         | 排序字段              | String | st（任意元数据）     |
+| order        | 排序规则              | String | aesc/desc(升序/降序) |
+| upload_time  | 上传时间              | Date   | 2020-10-16           |
+| st           | 接收站/数据来路标识   | String | CT                   |
+| tl           | 中继星标识            | String | TL1A2                |
+| mid          | 下行舱段标识/任务标识 | String | SZ12                 |
+| data_start   | 文件开始时间          | Date   | 2020-10-16           |
+| data_end     | 文件结束时间          | Date   | 2020-10-16           |
+| file_create  | 文件产生时间          | Date   | 2020-10-16           |
+| mb           | 前端接收主备机标识    | String | M                    |
+| no           | 序号标识              | String | 00001                |
+| suffix       | 文件扩展名            | String | raw                  |
 
 pmc-main_002-sub_002:
 
-| 查询参数名称 | 解释                  | 类型   | 查询值示例 |
-| ------------ | --------------------- | ------ | ---------- |
-| dlsc         | 下行舱段标识/任务标识 | String | TGTH       |
-| dtg          | 数据集合标识          | String | GCYC       |
-| dty          | 数据类型标识          | String | GCYC       |
-| eid          | 明密标识              | String | UE         |
-| data_end     | 数据接收结束时间      | String | 2020-10-16 |
-| data_start   | 数据接收开始时间      | String | 2020-10-16 |
-| file_create  | 文件产生时间          | String | 2020-10-16 |
-| er           | 数据包状态            | String | 000        |
-| suffix       | 文件扩展名            | String | .raw       |
-| st           | 接收站/数据来路标识   | String | CT         |
-| le           | 数据级别              | String | 00         |
-| er           | 数据包状态            | String | 000        |
+| 查询参数名称 | 解释                  | 类型   | 查询值示例           |
+| ------------ | --------------------- | ------ | -------------------- |
+| sort         | 排序字段              | String | dlsc（任意元数据）   |
+| order        | 排序规则              | String | aesc/desc(升序/降序) |
+| upload_time  | 上传时间              | Date   | 2020-10-16           |
+| dlsc         | 下行舱段标识/任务标识 | String | TGTH                 |
+| dtg          | 数据集合标识          | String | GCYC                 |
+| dty          | 数据类型标识          | String | GCYC                 |
+| eid          | 明密标识              | String | UE                   |
+| data_end     | 数据接收结束时间      | String | 2020-10-16           |
+| data_start   | 数据接收开始时间      | String | 2020-10-16           |
+| file_create  | 文件产生时间          | String | 2020-10-16           |
+| er           | 数据包状态            | String | 000                  |
+| suffix       | 文件扩展名            | String | .raw                 |
+| st           | 接收站/数据来路标识   | String | CT                   |
+| le           | 数据级别              | String | 00                   |
+| er           | 数据包状态            | String | 000                  |
 
 pmc-main_003-sub_003:
 
-| 查询参数名称 | 解释                  | 类型   | 查询值示例 |
-| ------------ | --------------------- | ------ | ---------- |
-| creator      | 生产者标志            | String | SADC       |
-| dlsc         | 下行舱段标识/任务标识 | String | TGTH       |
-| fstr         | 文件开始时间          | Date   | 2020-10-16 |
-| fend         | 文件结束时间          | Date   | 2020-10-16 |
-| fcreate      | 文件产生时间          | Date   | 2020-10-16 |
-| fbak         | 文件归档时间          | Date   | 2020-10-16 |
-| suffix       | 文件扩展名            | String | dat        |
+| 查询参数名称 | 解释                  | 类型   | 查询值示例           |
+| ------------ | --------------------- | ------ | -------------------- |
+| sort         | 排序字段              | String | dlsc（任意元数据）   |
+| order        | 排序规则              | String | aesc/desc(升序/降序) |
+| upload_time  | 上传时间              | Date   | 2020-10-16           |
+| creator      | 生产者标志            | String | SADC                 |
+| dlsc         | 下行舱段标识/任务标识 | String | TGTH                 |
+| fstr         | 文件开始时间          | Date   | 2020-10-16           |
+| fend         | 文件结束时间          | Date   | 2020-10-16           |
+| fcreate      | 文件产生时间          | Date   | 2020-10-16           |
+| fbak         | 文件归档时间          | Date   | 2020-10-16           |
+| suffix       | 文件扩展名            | String | dat                  |
 
 pmc-main_003-sub_004:
 
-| 查询参数名称 | 解释                  | 类型   | 查询值示例 |
-| ------------ | --------------------- | ------ | ---------- |
-| creator      | 生产者标志            | String | SADC       |
-| dlsc         | 下行舱段标识/任务标识 | String | TGTH       |
-| fstr         | 文件开始时间          | Date   | 2020-10-16 |
-| fend         | 文件结束时间          | Date   | 2020-10-16 |
-| fcreate      | 文件产生时间          | Date   | 2020-10-16 |
-| fbak         | 文件归档时间          | Date   | 2020-10-16 |
-| suffix       | 文件扩展名            | String | dat        |
+| 查询参数名称 | 解释                  | 类型   | 查询值示例           |
+| ------------ | --------------------- | ------ | -------------------- |
+| sort         | 排序字段              | String | dlsc（任意元数据）   |
+| order        | 排序规则              | String | aesc/desc(升序/降序) |
+| upload_time  | 上传时间              | Date   | 2020-10-16           |
+| creator      | 生产者标志            | String | SADC                 |
+| dlsc         | 下行舱段标识/任务标识 | String | TGTH                 |
+| fstr         | 文件开始时间          | Date   | 2020-10-16           |
+| fend         | 文件结束时间          | Date   | 2020-10-16           |
+| fcreate      | 文件产生时间          | Date   | 2020-10-16           |
+| fbak         | 文件归档时间          | Date   | 2020-10-16           |
+| suffix       | 文件扩展名            | String | dat                  |
 
 pmc-main_003-sub_005:
 
-| 查询参数名称 | 解释                  | 类型   | 查询值示例 |
-| ------------ | --------------------- | ------ | ---------- |
-| creator      | 生产者标志            | String | SE         |
-| dlsc         | 下行舱段标识/任务标识 | String | TGTH       |
-| symbol       | 文件标志              | String | CQYBPG     |
-| fstr         | 文件开始时间          | Date   | 2020-10-16 |
-| fend         | 文件结束时间          | Date   | 2020-10-16 |
-| fcreate      | 文件产生时间          | Date   | 2020-10-16 |
-| fbak         | 文件归档时间          | Date   | 2020-10-16 |
-| suffix       | 文件扩展名            | String | CQYBPG     |
+| 查询参数名称 | 解释                  | 类型   | 查询值示例           |
+| ------------ | --------------------- | ------ | -------------------- |
+| sort         | 排序字段              | String | dlsc（任意元数据）   |
+| order        | 排序规则              | String | aesc/desc(升序/降序) |
+| upload_time  | 上传时间              | Date   | 2020-10-16           |
+| creator      | 生产者标志            | String | SE                   |
+| dlsc         | 下行舱段标识/任务标识 | String | TGTH                 |
+| symbol       | 文件标志              | String | CQYBPG               |
+| fstr         | 文件开始时间          | Date   | 2020-10-16           |
+| fend         | 文件结束时间          | Date   | 2020-10-16           |
+| fcreate      | 文件产生时间          | Date   | 2020-10-16           |
+| fbak         | 文件归档时间          | Date   | 2020-10-16           |
+| suffix       | 文件扩展名            | String | CQYBPG               |
 
 pmc-main_003-sub_006:
 
-| 查询参数名称 | 解释                  | 类型   | 查询值示例 |
-| ------------ | --------------------- | ------ | ---------- |
-| creator      | 生产者标志            | String | SE         |
-| dlsc         | 下行舱段标识/任务标识 | String | TGTH       |
-| symbol       | 文件标志              | String | CQYBPG     |
-| explain      | 数据说明              | String | ABCD       |
-| fstr         | 文件开始时间          | Date   | 2020-10-16 |
-| fend         | 文件结束时间          | Date   | 2020-10-16 |
-| fcreate      | 文件产生时间          | Date   | 2020-10-16 |
-| fbak         | 文件归档时间          | Date   | 2020-10-16 |
-| suffix       | 文件扩展名            | String | CQYBPG     |
+| 查询参数名称 | 解释                  | 类型   | 查询值示例           |
+| ------------ | --------------------- | ------ | -------------------- |
+| sort         | 排序字段              | String | dlsc（任意元数据）   |
+| order        | 排序规则              | String | aesc/desc(升序/降序) |
+| upload_time  | 上传时间              | Date   | 2020-10-16           |
+| creator      | 生产者标志            | String | SE                   |
+| dlsc         | 下行舱段标识/任务标识 | String | TGTH                 |
+| symbol       | 文件标志              | String | CQYBPG               |
+| explain      | 数据说明              | String | ABCD                 |
+| fstr         | 文件开始时间          | Date   | 2020-10-16           |
+| fend         | 文件结束时间          | Date   | 2020-10-16           |
+| fcreate      | 文件产生时间          | Date   | 2020-10-16           |
+| fbak         | 文件归档时间          | Date   | 2020-10-16           |
+| suffix       | 文件扩展名            | String | CQYBPG               |
 
 pmc-main_004-sub_007:
 
-| 查询参数名称 | 解释             | 类型   | 查询值示例 |
-| ------------ | ---------------- | ------ | ---------- |
-| pr           | 文件生产者       | String | PA         |
-| sc           | 任务标识         | String | TGTH       |
-| dty          | 文件标识         | String | XX         |
-| fd           | 文件其他属性说明 | String | XXXX       |
-| data_end     | 文件结束时间     | String | 2020-10-16 |
-| data_start   | 文件开始时间     | String | 2020-10-16 |
-| gen_time     | 文件产生时间     | String | 2020-10-16 |
-| ext          | 文件扩展名       | String | XML        |
+| 查询参数名称 | 解释             | 类型   | 查询值示例           |
+| ------------ | ---------------- | ------ | -------------------- |
+| sort         | 排序字段         | String | pr（任意元数据）     |
+| order        | 排序规则         | String | aesc/desc(升序/降序) |
+| upload_time  | 上传时间         | Date   | 2020-10-16           |
+| pr           | 文件生产者       | String | PA                   |
+| sc           | 任务标识         | String | TGTH                 |
+| dty          | 文件标识         | String | XX                   |
+| fd           | 文件其他属性说明 | String | XXXX                 |
+| data_end     | 文件结束时间     | String | 2020-10-16           |
+| data_start   | 文件开始时间     | String | 2020-10-16           |
+| gen_time     | 文件产生时间     | String | 2020-10-16           |
+| ext          | 文件扩展名       | String | XML                  |
 
 ### FileResult类
 

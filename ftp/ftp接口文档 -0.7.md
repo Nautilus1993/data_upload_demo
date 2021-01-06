@@ -531,7 +531,7 @@ queryParam.setParam(queryParam.getParam("upload_time"),upload_time);
 
 #### 属性说明：排序 多个 升序降序
 
-pmc-main_001-sub_001
+pmc-main_013-sub_061
 
 | 查询参数名称 | 解释                  | 类型   | 查询值示例           |
 | ------------ | --------------------- | ------ | -------------------- |
@@ -548,7 +548,7 @@ pmc-main_001-sub_001
 | no           | 序号标识              | String | 00001                |
 | suffix       | 文件扩展名            | String | raw                  |
 
-pmc-main_002-sub_002:
+pmc-main_014-sub_062:
 
 | 查询参数名称 | 解释                  | 类型   | 查询值示例           |
 | ------------ | --------------------- | ------ | -------------------- |
@@ -568,7 +568,7 @@ pmc-main_002-sub_002:
 | le           | 数据级别              | String | 00                   |
 | er           | 数据包状态            | String | 000                  |
 
-pmc-main_003-sub_003:
+pmc-main_011-sub_057:
 
 | 查询参数名称 | 解释                  | 类型   | 查询值示例           |
 | ------------ | --------------------- | ------ | -------------------- |
@@ -583,7 +583,7 @@ pmc-main_003-sub_003:
 | fbak         | 文件归档时间          | Date   | 2020-10-16           |
 | suffix       | 文件扩展名            | String | dat                  |
 
-pmc-main_003-sub_004:
+pmc-main_011-sub_058:
 
 | 查询参数名称 | 解释                  | 类型   | 查询值示例           |
 | ------------ | --------------------- | ------ | -------------------- |
@@ -598,7 +598,7 @@ pmc-main_003-sub_004:
 | fbak         | 文件归档时间          | Date   | 2020-10-16           |
 | suffix       | 文件扩展名            | String | dat                  |
 
-pmc-main_003-sub_005:
+pmc-main_011-sub_059:
 
 | 查询参数名称 | 解释                  | 类型   | 查询值示例           |
 | ------------ | --------------------- | ------ | -------------------- |
@@ -614,7 +614,7 @@ pmc-main_003-sub_005:
 | fbak         | 文件归档时间          | Date   | 2020-10-16           |
 | suffix       | 文件扩展名            | String | CQYBPG               |
 
-pmc-main_003-sub_006:
+pmc-main_015-sub_063:
 
 | 查询参数名称 | 解释                  | 类型   | 查询值示例           |
 | ------------ | --------------------- | ------ | -------------------- |
@@ -631,7 +631,7 @@ pmc-main_003-sub_006:
 | fbak         | 文件归档时间          | Date   | 2020-10-16           |
 | suffix       | 文件扩展名            | String | CQYBPG               |
 
-pmc-main_004-sub_007:
+pmc-main_016-sub_064:
 
 | 查询参数名称 | 解释             | 类型   | 查询值示例           |
 | ------------ | ---------------- | ------ | -------------------- |
@@ -666,10 +666,9 @@ pmc-main_004-sub_007:
 
 #### 类说明：手动上传时，附带归档元信息基类
 
-| 属性名 | 解释   | 类型   | 说明         |
-| ------ | ------ | ------ | ------------ |
-| id     | 文件ID | String | 文件唯一标识 |
-| fileId | 文件ID | String | 文件唯一标识 |
+| 属性名 | 解释 | 类型 | 说明 |
+| ------ | ---- | ---- | ---- |
+|        |      |      |      |
 
 #### BasicFile实现类
 
@@ -684,6 +683,8 @@ pmc-main_004-sub_007:
 | cabin        | 所属飞行器   | String |      |
 | flyStage     | 所属飞行阶段 | String |      |
 | fileType     | 文件类型     | String |      |
+| indentify    | 文件标识     | String |      |
+| comment      | 备注         | String |      |
 
 2. ##### DataResultAchieveReportFile ：数据成果和成果报告文件元信息表
 
@@ -701,17 +702,17 @@ pmc-main_004-sub_007:
 
 3. ##### MedicalTestFile：航天医学实验数据文件表
 
-| 属性名       | 解释         | 类型         | 说明 |
-| ------------ | ------------ | ------------ | ---- |
-| itemId       | 项目ID       | Short        |      |
-| deviceId     | 设备ID       | Short        |      |
-| fileTime     | 文件创建时间 | Date         |      |
-| fileFullName | 文件名       | String       |      |
-| cabin        | String       | 所属飞行器   |      |
-| flyStage     | String       | 所属飞行阶段 |      |
-| fileType     | String       | 文件类型     |      |
-| indentity    | String       | 文件标识     |      |
-| comment      | String       | 备注         |      |
+| 属性名       | 解释         | 类型   | 说明 |
+| ------------ | ------------ | ------ | ---- |
+| itemId       | 项目ID       | Short  |      |
+| deviceId     | 设备ID       | Short  |      |
+| fileTime     | 文件创建时间 | Date   |      |
+| fileFullName | 文件名       | String |      |
+| cabin        | 所属飞行器   | String |      |
+| flyStage     | 所属飞行阶段 | String |      |
+| fileType     | 文件类型     | String |      |
+| indentity    | 文件标识     | String |      |
+| comment      | 备注         | String |      |
 
 4. ##### MicroHazardousGasFile：微量气体检测装备数据文件
 
@@ -731,6 +732,17 @@ pmc-main_004-sub_007:
 | ------------ | ------------ | ------ | ---- |
 | fileTime     | 文件创建时间 | Date   |      |
 | fileFullName | 文件名       | String |      |
+
+6. **CommonFile：通用数据文件表**
+
+| 属性名       | 解释         | 类型   | 说明 |
+| ------------ | ------------ | ------ | ---- |
+| fileFullName | 文件名称     | String |      |
+| Product      | 所属产品     | String |      |
+| deviceID     | 所属设备ID   | String |      |
+| Cabin        | 所属飞行器   | String |      |
+| FlyStage     | 所属飞行阶段 | String |      |
+| fileTime     | 文件创建时间 | Date   |      |
 
 
 

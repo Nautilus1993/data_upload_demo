@@ -28,14 +28,14 @@ public class testRawData_upload {
             // 待上传文件列表
             List<FTPFile> ftpFiles = new ArrayList<>();
             String localPath = "C:\\Users\\qrs\\Desktop";
-            String file = "CT_TL1A2_SZ12_23231028052556_20201028052556_20201028052556_M_00001.raw";
+            String file = "WT01_LaunchWindows_text_V1.9_name_20201230061251.dll";
             ftpFiles.add(new FTPFile(file,localPath));
-            file = "CT_TL1A2_SZ12_20244028052556_20201028052556_20201028052556_M_00001.raw";//PA_EN_TGTH_GCYC_00_GCYC_20200817234411_20200817234411_20220817234411_000.raw
+            file = "WT01_LaunchWindows_text_V1.9_name_20201230061252.dll";
             ftpFiles.add(new FTPFile(file,localPath));
 
             // 上传文件
-            String mainType = "main_001";     // 数据大类：归档数据
-            String subType = "sub_001";          // 数据小类：原始数据文件
+            String mainType = "main_001";     // 数据大类
+            String subType = "sub_001";          // 数据小类
             String cabin = "cabin_001"; //舱段ID
             //标签
             List<Tag> tagList = myFtp.getTags();//查看所有标签信息

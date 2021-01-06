@@ -26,8 +26,8 @@ public class testRawData_download {
         FTPTransferClient myFtp = new FTPTransferClient(USERNAME, PASSWORD);
 
         try {
-            String mainType = "main_001";     // 数据大类：归档数据
-            String subType = "sub_001";          // 数据小类：原始数据文件
+            String mainType = "main_001";     // 数据大类
+            String subType = "sub_001";          // 数据小类
 
             // 文件操作状态结果
             FileOperationResult result ;
@@ -48,7 +48,7 @@ public class testRawData_download {
             String downloadPath = "D:\\hanbing"; //下载到本地路径
             result = myFtp.startDownload(downloadPath,filesToDownload);//查询下载方法
 
-            String file = "CT_TL1A2_SZ12_20221028052556_20201028052556_20201028052556_M_00001.raw"; // 下载文件名
+            String file = "WT01_LaunchWindows_text_V1.9_name_20201230061252.dll"; // 下载文件名
             List<String> fileNames = new ArrayList<>();
             fileNames.add(file);//文件名称列表
             result = myFtp.startDownload(mainType, subType, downloadPath, fileNames) ;//直接下载方法

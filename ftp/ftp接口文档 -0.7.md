@@ -1,77 +1,77 @@
 - [ 简介](#head1)
 - [API 使用说明](#head2)
-	- [ FTPTransferClient类](#head3)
-		- [ 类说明：上传引擎类，包含FTP建立连接、上传、下载、查询、进度监控、退出功能](#head4)
-		- [ 方法说明：](#head5)
-		- [ 1.FTPTransferClient()方法](#head6)
-			- [ 方法说明：初始化FTPTransferClient用例：用户认证登录并获取相应FTP用户](#head7)
-			- [返回值：FTPTransferClient ](#head8)
-			- [ 使用示例](#head9)
-		- [ 2.searchFiles()方法](#head10)
-			- [ 方法说明：使用数据类型和查询条件进行分页搜索文件](#head11)
-			- [ 返回值：文件信息集合List<FTPFile>](#head12)
-			- [ 使用示例](#head13)
-			- [ 异常：Exception](#head14)
-		- [3.startDownload()方法 下载成功个数，失败个数，一共多少个](#head15)
-			- [3.1 查询后下载](#head16)
-			- [ 方法说明：文件下载，下载由search方法返回搜索结果的文件](#head17)
-			- [ 返回值：FilesOperationResult文件操作结果](#head18)
-			- [ FileOperationStatus枚举状态](#head19)
-			- [ 使用示例](#head20)
-			- [3.2 直接下载方法](#head21)
-			- [ 方法说明：根据文件名称直接下载文件](#head22)
-			- [返回值：FileOperationResult 文件操作结果](#head23)
-			- [ 使用示例](#head24)
-		- [4. getTags()方法](#head25)
-			- [ 方法说明：获取所有标签](#head26)
-			- [返回值：所有标签结果List<Tag> ](#head27)
-			- [ Tag类属性：](#head28)
-			- [ 使用示例](#head29)
-		- [5. startUpload()方法   整体多尝试上传几次  taskID  所有中间状态都放在redis里面](#head30)
-			- [5.1 文件自动归档上传](#head31)
-			- [ 方法说明：文件上传，归档时从文件名提取元信息](#head32)
-			- [ 返回值：FileOperationResult文件操作结果](#head33)
-			- [ FileOperationStatus枚举状态](#head34)
-			- [ 使用示例](#head35)
-			- [5.2 手动归档上传](#head36)
-			- [ 方法功能：文件上传，需要用户手动录入归档元信息](#head37)
-			- [ 返回值：FileOperationResult文件操作结果](#head38)
-			- [ 使用示例](#head39)
-		- [6. deleteFile()方法](#head40)
-			- [ 方法说明：删除文件](#head41)
-			- [ 返回值：FileOperationResult文件操作结果](#head42)
-			- [ FileOperationStatus枚举状态](#head43)
-			- [ 使用示例](#head44)
-		- [7.monitor()方法   :直接传任务号  ](#head45)
-			- [ 方法功能：监控上传或下载中文件的状态信息，包括传输进度，大小，状态](#head46)
-			- [返回值：MFileInfo 监控文件信息（见MFileInfo类）](#head47)
-			- [ 使用示例](#head48)
-		- [8. listFile()方法](#head49)
-			- [ 方法说明：根据数据类型查看所有的文件详细信息，包括文件名，上传时间，文件大小](#head50)
-			- [ 返回值：所有文件列表List<FTPFileInfo>](#head51)
-			- [ Tag类属性：](#head52)
-			- [ 使用示例](#head53)
-		- [9. logout()方法](#head54)
-			- [ 方法说明：当前用户退出登录](#head55)
-	- [ MFileInfo类](#head56)
-		- [ 类说明：文件监控实体类，监控方法返回该对象列表](#head57)
-		- [ 属性说明：](#head58)
-	- [ FTPFile类](#head59)
-		- [ 类说明：文件实体类，上传时只需要提供name和path](#head60)
-		- [ 属性说明：](#head61)
-	- [ QueryParam类](#head62)
-		- [ 类说明：查询实体类](#head63)
-		- [ 方法说明：](#head64)
-	- [ Param类](#head65)
-		- [类说明： 查询参数类](#head66)
-		- [属性说明：排序 多个 升序降序](#head67)
-	- [ FileResult类](#head68)
-		- [类说明： 文件操作结果类](#head69)
-		- [ 属性说明：](#head70)
-	- [ BasicFile](#head71)
-		- [ 类说明：手动上传时，附带归档元信息基类](#head72)
-		- [ BasicFile实现类](#head73)
-	- [ FTPFileInfo](#head74)
+  - [ FTPTransferClient类](#head3)
+  	- [ 类说明：上传引擎类，包含FTP建立连接、上传、下载、查询、进度监控、退出功能](#head4)
+  	- [ 方法说明：](#head5)
+  	- [ 1.FTPTransferClient()方法](#head6)
+  		- [ 方法说明：初始化FTPTransferClient用例：用户认证登录并获取相应FTP用户](#head7)
+  		- [返回值：FTPTransferClient ](#head8)
+  		- [ 使用示例](#head9)
+  	- [ 2.searchFiles()方法](#head10)
+  		- [ 方法说明：使用数据类型和查询条件进行分页搜索文件](#head11)
+  		- [ 返回值：文件信息集合List<FTPFile>](#head12)
+  		- [ 使用示例](#head13)
+  		- [ 异常：Exception](#head14)
+  	- [3.startDownload()方法 下载成功个数，失败个数，一共多少个](#head15)
+  		- [3.1 查询后下载](#head16)
+  		- [ 方法说明：文件下载，下载由search方法返回搜索结果的文件](#head17)
+  		- [ 返回值：FilesOperationResult文件操作结果](#head18)
+  		- [ FileOperationStatus枚举状态](#head19)
+  		- [ 使用示例](#head20)
+  		- [3.2 直接下载方法](#head21)
+  		- [ 方法说明：根据文件名称直接下载文件](#head22)
+  		- [返回值：FileOperationResult 文件操作结果](#head23)
+  		- [ 使用示例](#head24)
+  	- [4. getTags()方法](#head25)
+  		- [ 方法说明：获取所有标签](#head26)
+  		- [返回值：所有标签结果List<Tag> ](#head27)
+  		- [ Tag类属性：](#head28)
+  		- [ 使用示例](#head29)
+  	- [5. startUpload()方法   整体多尝试上传几次  taskID  所有中间状态都放在redis里面](#head30)
+  		- [5.1 文件自动归档上传](#head31)
+  		- [ 方法说明：文件上传，归档时从文件名提取元信息](#head32)
+  		- [ 返回值：FileOperationResult文件操作结果](#head33)
+  		- [ FileOperationStatus枚举状态](#head34)
+  		- [ 使用示例](#head35)
+  		- [5.2 手动归档上传](#head36)
+  		- [ 方法功能：文件上传，需要用户手动录入归档元信息](#head37)
+  		- [ 返回值：FileOperationResult文件操作结果](#head38)
+  		- [ 使用示例](#head39)
+  	- [6. deleteFile()方法](#head40)
+  		- [ 方法说明：删除文件](#head41)
+  		- [ 返回值：FileOperationResult文件操作结果](#head42)
+  		- [ FileOperationStatus枚举状态](#head43)
+  		- [ 使用示例](#head44)
+  	- [7.monitor()方法   :直接传任务号  ](#head45)
+  		- [ 方法功能：监控上传或下载中文件的状态信息，包括传输进度，大小，状态](#head46)
+  		- [返回值：MFileInfo 监控文件信息（见MFileInfo类）](#head47)
+  		- [ 使用示例](#head48)
+  	- [8. listFile()方法](#head49)
+  		- [ 方法说明：根据数据类型查看所有的文件详细信息，包括文件名，上传时间，文件大小](#head50)
+  		- [ 返回值：所有文件列表List<FTPFileInfo>](#head51)
+  		- [ Tag类属性：](#head52)
+  		- [ 使用示例](#head53)
+  	- [9. logout()方法](#head54)
+  		- [ 方法说明：当前用户退出登录](#head55)
+  - [ MFileInfo类](#head56)
+  	- [ 类说明：文件监控实体类，监控方法返回该对象列表](#head57)
+  	- [ 属性说明：](#head58)
+  - [ FTPFile类](#head59)
+  	- [ 类说明：文件实体类，上传时只需要提供name和path](#head60)
+  	- [ 属性说明：](#head61)
+  - [ QueryParam类](#head62)
+  	- [ 类说明：查询实体类](#head63)
+  	- [ 方法说明：](#head64)
+  - [ Param类](#head65)
+  	- [类说明： 查询参数类](#head66)
+  	- [属性说明：排序 多个 升序降序](#head67)
+  - [ FileResult类](#head68)
+  	- [类说明： 文件操作结果类](#head69)
+  	- [ 属性说明：](#head70)
+  - [ BasicFile](#head71)
+  	- [ 类说明：手动上传时，附带归档元信息基类](#head72)
+  	- [ BasicFile实现类](#head73)
+  - [ FTPFileInfo](#head74)
 ## <span id="head1"> 简介</span>
 
 ​       此文档为云平台文件数据归档API，传输协议采用FTP方式。**API使用说明**包含项目中所有类、方法接口和参数说明。
@@ -135,8 +135,8 @@ public List<FTPFile> searchFiles(QueryParam query_params，
 ```java
 int pageSize = 10; //分页大小 
 int pageNum = 1; //页码
-String mainType = "main_001";  // 数据大类：归档数据
-String subType = "sub_001";    // 数据小类：原始数据文件
+String mainType = "main_001";  // 数据大类
+String subType = "sub_001";    // 数据小类
 //查询条件
 QueryParam queryParam = new QueryParam(mainType,subType);
 String upload_time = "2020-11-12";//上传时间
@@ -211,7 +211,7 @@ FileOperationResult result = myFtp.startDownload(downloadPath,
 public FileOperationResult startDownload(String mainType, 
                                          String subType,
                                          String localDir, 
-                                         List<String>fileNames) throws Exception 、、上线下线
+                                         List<String>fileNames) throws Exception 
 ```
 
 ##### <span id="head22"> 方法说明：根据文件名称直接下载文件</span>
@@ -230,7 +230,7 @@ public FileOperationResult startDownload(String mainType,
 ```java
 String downloadPath = "D:\\hanbing"; //下载到本地路径;
 List<String> fileNames = new ArrayList<>();
-fileNames.add("CT_TL1A2_SZ12_20201028052556_20201028052556_20201028052556_M_00001.raw");//文件名称列表 
+fileNames.add("WT01_LaunchWindows_text_V1.9_name_20201230061252.dll");//文件名称列表 
 String mainType = "main_001";  // 数据大类：归档数据
 String subType = "sub_001";    // 数据小类：原始数据文件
 FileOperationResult result = myFtp.startDownload(mainType, subType, downloadPath, fileNames);
@@ -332,10 +332,10 @@ public FileOperationResult startUpload(String cabin，
 ```java
 List<FTPFile> ftpFiles = new ArrayList<>();// 待上传文件列表
 String localPath = "C:\\Users\\qrs\\Desktop";//本地文件所在目录
-String file = "CT_TL1A2_SZ12_20201028052556_20201028052556_20201028052556_M_00001.raw";//文件名
+String file = "WT01_LaunchWindows_text_V1.9_name_20201230061252.dll";//文件名
 ftpFiles.add(new FTPFile(file,localPath));//文件加入待上传列表
-String mainType = "main_001";  // 数据大类：归档数据
-String subType = "sub_001";    // 数据小类：原始数据文件
+String mainType = "main_001";  // 数据大类
+String subType = "sub_001";    // 数据小类
 String cabin = "cabin_001";   //舱段ID
 List<String>tagLabels = new ArrayList<>();//添加标签
 tagLabels.add("40e8e2517c96482c90ea0aba1ce637b0");
@@ -370,7 +370,7 @@ public FileOperationResult startUploadWithInfo(String cabin,
 ```java
 Map<FTPFile, BaseFile> filesToUpload = new HashMap<>();// 待上传文件列表
 String localPath = "C:\\Users\\qrs\\Desktop";//本地文件所在目录
-String file = "CT_TL1A2_SZ12_20201028052556_20201028052556_20201028052556_M_00001.raw";//文件名
+String file = "WT01_LaunchWindows_text_V1.9_name_20201230061252.dll";//文件名
 FTPFile ftpFile = new FTPFile(file,localPath);
 //归档信息
 DataResultAchieveReportFile reportFile = new DataResultAchieveReportFile();
@@ -383,8 +383,8 @@ reportFile.setAchieveCopyright("版权方");
 reportFile.setDescOfAchievs("描述");
 reportFile.setFounderTime(new Date());
 filesToUpload.put(ftpFile,reportFile);//文件加入待上传列表
-String mainType = "main_001";  // 数据大类：归档数据
-String subType = "sub_001";    // 数据小类：原始数据文件
+String mainType = "main_001";  // 数据大类
+String subType = "sub_001";    // 数据小类
 String cabin = "cabin_001";   //舱段ID
 List<String>tagLabels = new ArrayList<>();//添加标签
 tagLabels.add("40e8e2517c96482c90ea0aba1ce637b0");
@@ -451,8 +451,8 @@ public List<MFileInfo> monitor(String mainTypeId,
 ##### <span id="head48"> 使用示例</span>
 
 ```java
-String mainType = "main_001";  // 数据大类：归档数据
-String subType = "sub_001";    // 数据小类：原始数据文件            
+String mainType = "main_001";  // 数据大类
+String subType = "sub_001";    // 数据小类          
 String startTime = "2020-10-14 15:36:02";//开始监控时间
 String endTime = "2020-10-24 15:36:02";//结束监控时间
 //监控方法
@@ -587,8 +587,8 @@ public void setParam(Param param, String paramValue)
 
 ```java
 //查询条件 初始化
-String mainType = "main_001";     // 数据大类：归档数据
-String subType = "sub_001";          // 数据小类：原始数据文件
+String mainType = "main_001";     // 数据大类
+String subType = "sub_001";          // 数据小类
 QueryParam queryParam = new QueryParam(mainType,subType);
 //查看所有查询字段param
 Map<String,Param> map = queryParam.getParams();
@@ -605,7 +605,7 @@ queryParam.setParam(queryParam.getParam("upload_time"),upload_time);
 
 #### <span id="head67">属性说明：排序 多个 升序降序</span>
 
-pmc-main_001-sub_001
+pmc-main_013-sub_061
 
 | 查询参数名称 | 解释                  | 类型   | 查询值示例           |
 | ------------ | --------------------- | ------ | -------------------- |
@@ -622,7 +622,7 @@ pmc-main_001-sub_001
 | no           | 序号标识              | String | 00001                |
 | suffix       | 文件扩展名            | String | raw                  |
 
-pmc-main_002-sub_002:
+pmc-main_014-sub_062:
 
 | 查询参数名称 | 解释                  | 类型   | 查询值示例           |
 | ------------ | --------------------- | ------ | -------------------- |
@@ -642,7 +642,7 @@ pmc-main_002-sub_002:
 | le           | 数据级别              | String | 00                   |
 | er           | 数据包状态            | String | 000                  |
 
-pmc-main_003-sub_003:
+pmc-main_011-sub_057:
 
 | 查询参数名称 | 解释                  | 类型   | 查询值示例           |
 | ------------ | --------------------- | ------ | -------------------- |
@@ -657,7 +657,7 @@ pmc-main_003-sub_003:
 | fbak         | 文件归档时间          | Date   | 2020-10-16           |
 | suffix       | 文件扩展名            | String | dat                  |
 
-pmc-main_003-sub_004:
+pmc-main_011-sub_058:
 
 | 查询参数名称 | 解释                  | 类型   | 查询值示例           |
 | ------------ | --------------------- | ------ | -------------------- |
@@ -672,7 +672,7 @@ pmc-main_003-sub_004:
 | fbak         | 文件归档时间          | Date   | 2020-10-16           |
 | suffix       | 文件扩展名            | String | dat                  |
 
-pmc-main_003-sub_005:
+pmc-main_011-sub_059:
 
 | 查询参数名称 | 解释                  | 类型   | 查询值示例           |
 | ------------ | --------------------- | ------ | -------------------- |
@@ -688,7 +688,7 @@ pmc-main_003-sub_005:
 | fbak         | 文件归档时间          | Date   | 2020-10-16           |
 | suffix       | 文件扩展名            | String | CQYBPG               |
 
-pmc-main_003-sub_006:
+pmc-main_015-sub_063:
 
 | 查询参数名称 | 解释                  | 类型   | 查询值示例           |
 | ------------ | --------------------- | ------ | -------------------- |
@@ -705,7 +705,7 @@ pmc-main_003-sub_006:
 | fbak         | 文件归档时间          | Date   | 2020-10-16           |
 | suffix       | 文件扩展名            | String | CQYBPG               |
 
-pmc-main_004-sub_007:
+pmc-main_016-sub_064:
 
 | 查询参数名称 | 解释             | 类型   | 查询值示例           |
 | ------------ | ---------------- | ------ | -------------------- |
@@ -740,10 +740,9 @@ pmc-main_004-sub_007:
 
 #### <span id="head72"> 类说明：手动上传时，附带归档元信息基类</span>
 
-| 属性名 | 解释   | 类型   | 说明         |
-| ------ | ------ | ------ | ------------ |
-| id     | 文件ID | String | 文件唯一标识 |
-| fileId | 文件ID | String | 文件唯一标识 |
+| 属性名 | 解释 | 类型 | 说明 |
+| ------ | ---- | ---- | ---- |
+|        |      |      |      |
 
 #### <span id="head73"> BasicFile实现类</span>
 
@@ -758,6 +757,8 @@ pmc-main_004-sub_007:
 | cabin        | 所属飞行器   | String |      |
 | flyStage     | 所属飞行阶段 | String |      |
 | fileType     | 文件类型     | String |      |
+| indentify    | 文件标识     | String |      |
+| comment      | 备注         | String |      |
 
 2. ##### DataResultAchieveReportFile ：数据成果和成果报告文件元信息表
 
@@ -805,6 +806,17 @@ pmc-main_004-sub_007:
 | ------------ | ------------ | ------ | ---- |
 | fileTime     | 文件创建时间 | Date   |      |
 | fileFullName | 文件名       | String |      |
+
+6. **CommonFile：通用数据文件表**
+
+| 属性名       | 解释         | 类型   | 说明 |
+| ------------ | ------------ | ------ | ---- |
+| fileFullName | 文件名称     | String |      |
+| Product      | 所属产品     | String |      |
+| deviceID     | 所属设备ID   | String |      |
+| Cabin        | 所属飞行器   | String |      |
+| FlyStage     | 所属飞行阶段 | String |      |
+| fileTime     | 文件创建时间 | Date   |      |
 
 
 
@@ -883,8 +895,8 @@ public List<FTPFile> searchFiles(QueryParam query_params，
 ```java
 int pageSize = 10; //分页大小 
 int pageNum = 1; //页码
-String mainType = "main_001";  // 数据大类：归档数据
-String subType = "sub_001";    // 数据小类：原始数据文件
+String mainType = "main_001";  // 数据大类
+String subType = "sub_001";    // 数据小类
 //查询条件
 QueryParam queryParam = new QueryParam(mainType,subType);
 String upload_time = "2020-11-12";//上传时间
@@ -978,9 +990,9 @@ public FileOperationResult startDownload(String mainType,
 ```java
 String downloadPath = "D:\\hanbing"; //下载到本地路径;
 List<String> fileNames = new ArrayList<>();
-fileNames.add("CT_TL1A2_SZ12_20201028052556_20201028052556_20201028052556_M_00001.raw");//文件名称列表 
-String mainType = "main_001";  // 数据大类：归档数据
-String subType = "sub_001";    // 数据小类：原始数据文件
+fileNames.add("WT01_LaunchWindows_text_V1.9_name_20201230061252.dll");//文件名称列表 
+String mainType = "main_001";  // 数据大类
+String subType = "sub_001";    // 数据小类
 FileOperationResult result = myFtp.startDownload(mainType, subType, downloadPath, fileNames);
 ```
 
@@ -1080,10 +1092,10 @@ public FileOperationResult startUpload(String cabin，
 ```java
 List<FTPFile> ftpFiles = new ArrayList<>();// 待上传文件列表
 String localPath = "C:\\Users\\qrs\\Desktop";//本地文件所在目录
-String file = "CT_TL1A2_SZ12_20201028052556_20201028052556_20201028052556_M_00001.raw";//文件名
+String file = "WT01_LaunchWindows_text_V1.9_name_20201230061252.dll";//文件名
 ftpFiles.add(new FTPFile(file,localPath));//文件加入待上传列表
-String mainType = "main_001";  // 数据大类：归档数据
-String subType = "sub_001";    // 数据小类：原始数据文件
+String mainType = "main_001";  // 数据大类
+String subType = "sub_001";    // 数据小类
 String cabin = "cabin_001";   //舱段ID
 List<String>tagLabels = new ArrayList<>();//添加标签
 tagLabels.add("40e8e2517c96482c90ea0aba1ce637b0");
@@ -1118,7 +1130,7 @@ public FileOperationResult startUploadWithInfo(String cabin,
 ```java
 Map<FTPFile, BaseFile> filesToUpload = new HashMap<>();// 待上传文件列表
 String localPath = "C:\\Users\\qrs\\Desktop";//本地文件所在目录
-String file = "CT_TL1A2_SZ12_20201028052556_20201028052556_20201028052556_M_00001.raw";//文件名
+String file = "WT01_LaunchWindows_text_V1.9_name_20201230061252.dll";//文件名
 FTPFile ftpFile = new FTPFile(file,localPath);
 //归档信息
 DataResultAchieveReportFile reportFile = new DataResultAchieveReportFile();
@@ -1131,8 +1143,8 @@ reportFile.setAchieveCopyright("版权方");
 reportFile.setDescOfAchievs("描述");
 reportFile.setFounderTime(new Date());
 filesToUpload.put(ftpFile,reportFile);//文件加入待上传列表
-String mainType = "main_001";  // 数据大类：归档数据
-String subType = "sub_001";    // 数据小类：原始数据文件
+String mainType = "main_001";  // 数据大类
+String subType = "sub_001";    // 数据小类
 String cabin = "cabin_001";   //舱段ID
 List<String>tagLabels = new ArrayList<>();//添加标签
 tagLabels.add("40e8e2517c96482c90ea0aba1ce637b0");
@@ -1199,8 +1211,8 @@ public List<MFileInfo> monitor(String mainTypeId,
 ##### 使用示例
 
 ```java
-String mainType = "main_001";  // 数据大类：归档数据
-String subType = "sub_001";    // 数据小类：原始数据文件            
+String mainType = "main_001";  // 数据大类
+String subType = "sub_001";    // 数据小类            
 String startTime = "2020-10-14 15:36:02";//开始监控时间
 String endTime = "2020-10-24 15:36:02";//结束监控时间
 //监控方法
@@ -1335,8 +1347,8 @@ public void setParam(Param param, String paramValue)
 
 ```java
 //查询条件 初始化
-String mainType = "main_001";     // 数据大类：归档数据
-String subType = "sub_001";          // 数据小类：原始数据文件
+String mainType = "main_001";     // 数据大类
+String subType = "sub_001";          // 数据小类
 QueryParam queryParam = new QueryParam(mainType,subType);
 //查看所有查询字段param
 Map<String,Param> map = queryParam.getParams();
